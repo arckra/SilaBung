@@ -21,12 +21,10 @@ class User extends Authenticatable
         'latitude',
         'longitude',
     ];
-
     protected $hidden = [
         'password',
         'remember_token',
     ];
-
     protected function casts(): array
     {
         return [
@@ -37,47 +35,44 @@ class User extends Authenticatable
             'longitude'         => 'float',
         ];
     }
-
-    /* ---------- Relasi ---------- */
-
     public function items()
     {
         return $this->hasMany(Item::class, 'supplier_id');
     }
-
     public function requests()
     {
         return $this->hasMany(ItemRequest::class, 'customer_id');
     }
-
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
-
-    /* ---------- Helper role ---------- */
-
     public function isCustomer(): bool
     {
         return $this->role === 'customer';
     }
-
     public function isSupplier(): bool
     {
         return $this->role === 'supplier';
     }
-
     public function hasSelectedRole(): bool
     {
         return ! is_null($this->role);
     }
-
-    /** Koordinat user sebagai array ['lat' => ..., 'lng' => ...] atau null. */
     public function coordinates(): ?array
     {
         if ($this->latitude === null || $this->longitude === null) {
             return null;
         }
         return ['lat' => $this->latitude, 'lng' => $this->longitude];
+    }
+    public function conversationsAsCustomer()
+    {
+        return $this->hasMany(Conversation::class, 'customer_id');
+    }
+
+    public function conversationsAsSupplier()
+    {
+        return $this->hasMany(Conversation::class, 'supplier_id');
     }
 }

@@ -140,7 +140,21 @@
                     </div>
                 </div>
             </div>
-
+            @if (auth()->id() !== $item->supplier_id)
+                <form method="POST" action="{{ route('chat.start') }}">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ $item->supplier_id }}">
+                    <input type="hidden" name="item_id" value="{{ $item->id }}">
+                    <button type="submit"
+                            class="w-full h-11 rounded-xl border border-[#16A34A] bg-white text-[#166534] text-sm font-bold
+                                   hover:bg-[#F0FDF4] transition flex items-center justify-center gap-2">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Chat dengan Supplier
+                    </button>
+                </form>
+            @endif
             {{-- Jarak --}}
             @if ($distanceKm !== null)
                 <div class="bg-white border border-[#E3EAE3] rounded-2xl p-5 space-y-2">

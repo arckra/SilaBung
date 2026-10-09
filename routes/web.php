@@ -20,6 +20,8 @@ Route::get('/', function () {
     return view('landing');
 })->name('home');
 
+Route::view('/tentang', 'tentang')->name('tentang');
+
 /* Onboarding */
 Route::middleware('auth')->group(function () {
     Route::get('/onboarding/role',  [OnboardingController::class, 'show'])->name('onboarding.role');
@@ -69,3 +71,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::middleware(['auth'])
+    ->prefix('chat')
+    ->name('chat.')
+    ->group(function () {
+        Route::get('/',                       [\App\Http\Controllers\ChatController::class, 'page'])->name('index');
+        Route::get('/list',                   [\App\Http\Controllers\ChatController::class, 'list'])->name('list');
+        Route::get('/{conversation}/messages',[\App\Http\Controllers\ChatController::class, 'messages'])->name('messages');
+        Route::post('/{conversation}/send',   [\App\Http\Controllers\ChatController::class, 'send'])->name('send');
+        Route::post('/start',                 [\App\Http\Controllers\ChatController::class, 'start'])->name('start');
+    });
