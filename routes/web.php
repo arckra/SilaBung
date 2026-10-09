@@ -49,6 +49,14 @@ Route::middleware(['auth', 'role:customer'])
         Route::patch('/requests/{request}/cancel', [CustomerRequest::class, 'cancel'])->name('requests.cancel');
         Route::get('/favorites', [CustomerFavorite::class, 'index'])->name('favorites');
         Route::post('/items/{item}/favorite', [CustomerFavorite::class, 'toggle'])->name('items.favorite');
+
+        Route::get('/wishlist',                        [\App\Http\Controllers\Customer\DemandListController::class, 'index'])->name('wishlist.index');
+        Route::get('/wishlist/create',                 [\App\Http\Controllers\Customer\DemandListController::class, 'create'])->name('wishlist.create');
+        Route::post('/wishlist',                       [\App\Http\Controllers\Customer\DemandListController::class, 'store'])->name('wishlist.store');
+        Route::get('/wishlist/{wishlist}',             [\App\Http\Controllers\Customer\DemandListController::class, 'show'])->name('wishlist.show');
+        Route::delete('/wishlist/{wishlist}',          [\App\Http\Controllers\Customer\DemandListController::class, 'destroy'])->name('wishlist.destroy');
+        Route::post('/wishlist/{wishlist}/confirm',    [\App\Http\Controllers\Customer\DemandListController::class, 'confirm'])->name('wishlist.confirm');
+        Route::post('/allocations/{allocation}/toggle',[\App\Http\Controllers\Customer\DemandListController::class, 'toggleAllocation'])->name('wishlist.toggle');
     });
 
 /* ============ SUPPLIER ============ */
@@ -68,6 +76,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/profile/avatar',   [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
 });
 
 require __DIR__.'/auth.php';
@@ -76,6 +87,10 @@ Route::middleware(['auth'])
     ->prefix('chat')
     ->name('chat.')
     ->group(function () {
+        Route::get('/group/{group}',          [\App\Http\Controllers\ChatController::class, 'groupPage'])->name('group');
+        Route::get('/group/{group}/messages', [\App\Http\Controllers\ChatController::class, 'groupMessages'])->name('group.messages');
+        Route::post('/group/{group}/send',    [\App\Http\Controllers\ChatController::class, 'groupSend'])->name('group.send');
+
         Route::get('/',                       [\App\Http\Controllers\ChatController::class, 'page'])->name('index');
         Route::get('/list',                   [\App\Http\Controllers\ChatController::class, 'list'])->name('list');
         Route::get('/{conversation}/messages',[\App\Http\Controllers\ChatController::class, 'messages'])->name('messages');

@@ -25,6 +25,12 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        article p,
+        section p {
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+        }
     </style>
 
     <style id="silabung-dark-css">
@@ -81,63 +87,99 @@
     </div>
 </nav>
 
-{{-- ============ HEADER ============ --}}
 <header class="max-w-3xl mx-auto px-5 pt-16 pb-10">
     <div class="text-[11px] font-extrabold uppercase tracking-widest text-[#16A34A] mb-3">
         Tentang Kami
     </div>
     <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-5">
-        Kami bikin SILABUNG karena barang bekas sering dibuang bukan karena rusak, tapi karena tidak tahu harus ke siapa.
+        SILABUNG mulai dari masalah sederhana: barang menumpuk di kos, tapi tidak tahu harus dikasih ke siapa.
     </h1>
     <p class="text-[#647164] text-base leading-relaxed max-w-2xl">
-        Ini cerita singkat soal kenapa project ini ada, apa yang sebenarnya dilakukan, dan siapa yang mengerjakannya.
+        Kami mahasiswa Universitas Pelita Bangsa. Project ini dibuat karena kami sendiri mengalami masalah itu —
+        dan ternyata bukan cuma kami.
     </p>
 </header>
 
-{{-- ============ LATAR BELAKANG ============ --}}
 <section class="max-w-3xl mx-auto px-5 py-10 border-t border-[#E3EAE3]">
     <h2 class="text-xl font-extrabold tracking-tight mb-5">Kenapa project ini dibuat</h2>
 
     <div class="space-y-4 text-[#647164] text-[15px] leading-relaxed">
         <p>
-            Waktu kami lihat kos-kosan, gudang kecil, dan rumah tangga di sekitar kami, banyak sekali barang yang masih layak
-            tapi hanya menumpuk atau akhirnya dibuang. Kardus bekas paket, botol plastik, potongan kayu, pakaian yang sudah
-            tidak dipakai. Bukan karena rusak. Hanya karena tidak ada yang tahu siapa yang butuh.
+            Semuanya mulai dari hal yang cukup sepele. Di kos, di rumah, di kamar barang terus menumpuk.
+            Pakaian yang sudah jarang dipakai, buku yang tidak dibuka lagi, peralatan yang tidak terpakai,
+            kardus bekas paket yang menumpuk di sudut kamar. Tidak rusak, tapi juga tidak dipakai.
         </p>
         <p>
-            Di sisi lain, banyak mahasiswa yang butuh kardus untuk tugas, pengrajin yang cari kayu bekas, atau komunitas
-            yang butuh bahan untuk kegiatan. Mereka keliling dan tetap tidak ketemu, sementara barang itu ada di suatu tempat,
-            hanya beberapa kilometer dari mereka.
+            Kami bingung harus diapakan. Dibuang sayang. Disimpan terus ya cuma jadi beban. Sering kali akhirnya
+            dibiarkan bertumpuk, sampai akhirnya memang dibuang karena sudah tidak ada tempat lagi.
         </p>
         <p>
-            Masalahnya bukan soal barangnya. Masalahnya soal <b class="text-[#172117]">siapa yang punya, siapa yang butuh,
-            dan bagaimana mereka bisa ketemu</b>. Itu yang kami coba selesaikan.
+            Sementara di sisi lain, ada banyak orang yang justru membutuhkan barang-barang layak pakai seperti itu.
+            Mahasiswa perantau yang baru mulai hidup sendiri, keluarga yang sedang kesulitan, penghuni panti yang
+            butuh pakaian atau perlengkapan. Kebutuhan mereka nyata, tapi sering tidak terpenuhi.
+        </p>
+        <p>
+            Setelah kami pikir-pikir, masalahnya bukan karena tidak ada yang mau memberi. Masalahnya karena
+            <b class="text-[#172117]">pemberi dan penerima tidak saling terhubung</b>. Orang yang ingin mendonasikan
+            barang bingung harus menyalurkan ke mana. Kalau pun tahu tempatnya, prosesnya sering dianggap ribet —
+            harus kirim ke sana, harus antar ke sini, harus daftar di situ. Akhirnya barangnya ya tetap tersimpan.
         </p>
     </div>
 </section>
 
-{{-- ============ APA ITU SILABUNG ============ --}}
 <section class="max-w-3xl mx-auto px-5 py-10 border-t border-[#E3EAE3]">
     <h2 class="text-xl font-extrabold tracking-tight mb-5">Apa yang SILABUNG lakukan</h2>
 
     <div class="space-y-4 text-[#647164] text-[15px] leading-relaxed">
         <p>
-            SILABUNG adalah tempat di mana orang yang punya barang tidak terpakai bisa mendaftarkannya, dan orang yang
-            butuh bisa menemukannya berdasarkan <b class="text-[#172117]">jenis barang dan jarak</b>.
+            <b class="text-[#172117]">SILABUNG — Sirkula Sambung</b> adalah platform yang mempertemukan orang yang
+            ingin menyalurkan barang layak pakai dengan orang yang membutuhkannya. Langsung, tanpa perantara,
+            dan tanpa biaya.
         </p>
         <p>
-            Bukan marketplace. Tidak ada transaksi uang di sini. Yang kami sambungkan hanya dua hal: pemilik barang dan
-            pencari barang. Setelah mereka ketemu, urusan pengambilan disepakati langsung lewat fitur chat di dalam platform.
+            Cara kerjanya sederhana. Pemberi cukup mengunggah barang yang ingin disalurkan — lengkap dengan foto,
+            kondisi, jumlah, dan lokasinya. Penerima yang sedang membutuhkan cukup mencari dan mengajukan permintaan.
+            Setelah keduanya sepakat, mereka mengonfirmasi serah terima di platform.
+        </p>
+        <p>
+            Dengan begitu, barang tidak berhenti sebagai sampah. Barangnya terus <b class="text-[#172117]">beredar
+            (sirkula)</b> dan <b class="text-[#172117]">tersambung (sambung)</b> ke orang yang benar-benar
+            membutuhkannya.
         </p>
         <p>
             Ada dua peran di SILABUNG. <b class="text-[#172117]">Supplier</b> adalah yang membagikan barang.
-            <b class="text-[#172117]">Customer</b> adalah yang mencari dan mengajukan permintaan. Peran ini dipilih sekali
-            saat pertama kali daftar, dan tidak bisa diubah — supaya data dan relasinya tetap jelas.
+            <b class="text-[#172117]">Customer</b> adalah yang mencari dan mengajukan permintaan. Peran ini
+            dipilih sekali saat pertama kali daftar, dan tidak bisa diubah — supaya data dan relasinya tetap jelas.
         </p>
     </div>
 </section>
 
-{{-- ============ PRINSIP ============ --}}
+<section class="max-w-3xl mx-auto px-5 py-10 border-t border-[#E3EAE3]">
+    <h2 class="text-xl font-extrabold tracking-tight mb-5">Berdasarkan penelitian terdahulu</h2>
+
+    <div class="space-y-4 text-[#647164] text-[15px] leading-relaxed">
+        <p>
+            Konsep penyaluran barang bekas layak pakai sebenarnya bukan hal baru. Sudah ada penelitian-penelitian
+            sebelumnya yang membahas soal ini bagaimana barang yang tidak terpakai bisa disalurkan kembali ke
+            masyarakat yang membutuhkan.
+        </p>
+        <p>
+            SILABUNG terinspirasi dari penelitian-penelitian tersebut, dan mencoba mengembangkannya dalam skala
+            yang lebih kecil. Kami fokuskan dulu ke satu lingkungan yang kami kenal betul:
+            <b class="text-[#172117]">mahasiswa Universitas Pelita Bangsa</b>.
+        </p>
+        <p>
+            Kami pilih lingkungan ini karena satu alasan mahasiswa cenderung impulsif dalam membeli. Beli karena
+            sedang tren, karena diskon, karena butuh sebentar. Setelah beberapa bulan, barangnya berhenti dipakai
+            tapi tidak dibuang karena masih sayang. Akhirnya menumpuk.
+        </p>
+        <p>
+            Dari situ kami berharap SILABUNG bisa ikut membantu: mengurangi penumpukan barang yang tidak terpakai
+            di sekitar kos dan rumah, sekaligus menumbuhkan budaya berbagi di lingkungan kampus.
+        </p>
+    </div>
+</section>
+
 <section class="max-w-3xl mx-auto px-5 py-10 border-t border-[#E3EAE3]">
     <h2 class="text-xl font-extrabold tracking-tight mb-6">Prinsip yang kami pegang</h2>
 
@@ -146,13 +188,13 @@
             $principles = [
                 [
                     'n' => '01',
-                    't' => 'Pakai dulu, baru daur ulang',
-                    'd' => 'Sebelum barang dilebur jadi bahan baru, cek dulu: masih bisa dipakai tidak? Menggunakan kembali jauh lebih hemat energi daripada mendaur ulang.',
+                    't' => 'Barangnya masih layak, bukan sampah',
+                    'd' => 'Yang kami salurkan adalah barang yang masih bisa dipakai dan bukan barang rusak. Kalau memang sudah tidak layak, sebaiknya masuk jalur daur ulang, bukan jalur donasi.',
                 ],
                 [
                     'n' => '02',
-                    't' => 'Jarak itu penting',
-                    'd' => 'Barang bekas sering tidak diambil karena lokasinya jauh. Kami tampilkan jarak dan lokasi supplier langsung di halaman detail, supaya orang bisa memutuskan sebelum jalan.',
+                    't' => 'Lingkungan kampus dulu',
+                    'd' => 'Kami tidak mulai dari skala besar. Kami fokuskan dulu ke mahasiswa Universitas Pelita Bangsa dan sekitarnya, supaya alur dan kepercayaan antar pengguna lebih mudah dibangun.',
                 ],
                 [
                     'n' => '03',
@@ -162,7 +204,7 @@
                 [
                     'n' => '04',
                     't' => 'Tidak ada perantara',
-                    'd' => 'SILABUNG tidak mengambil komisi, tidak menahan barang, tidak mengatur harga. Pemilik barang dan pencari barang berhubungan langsung.',
+                    'd' => 'SILABUNG tidak mengambil komisi, tidak menahan barang, tidak mengatur harga. Pemberi dan penerima berhubungan langsung, dan sepakat serah terima di platform.',
                 ],
             ];
         @endphp
@@ -307,15 +349,6 @@
 <footer class="border-t border-[#E3EAE3] bg-white">
     <div class="max-w-5xl mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#647164]">
         <div>© {{ date('Y') }} SILABUNG — Sirkula Sambung</div>
-        <div class="flex items-center gap-5">
-            <a href="{{ route('home') }}" class="hover:text-[#166534]">Beranda</a>
-            <a href="{{ route('tentang') }}" class="hover:text-[#166534]">Tentang</a>
-            @auth
-                <a href="{{ route('dashboard') }}" class="hover:text-[#166534]">Dashboard</a>
-            @else
-                <a href="{{ route('login') }}" class="hover:text-[#166534]">Masuk</a>
-            @endauth
-        </div>
     </div>
 </footer>
 

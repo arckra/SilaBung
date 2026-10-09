@@ -14,6 +14,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar_path',
         'role',
         'role_selected_at',
         'city',
@@ -66,6 +67,25 @@ class User extends Authenticatable
         }
         return ['lat' => $this->latitude, 'lng' => $this->longitude];
     }
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (! $this->avatar_path) {
+            return null;
+        }
+        return \Storage::disk('public')->url($this->avatar_path);
+    }
+
+    public function getInitialsAttribute(): string
+    {
+        return strtoupper(
+            collect(explode(' ', trim($this->name)))
+                ->filter()
+                ->take(2)
+                ->map(fn ($w) => mb_substr($w, 0, 1))
+                ->implode('')
+        );
+    }
     public function conversationsAsCustomer()
     {
         return $this->hasMany(Conversation::class, 'customer_id');
@@ -74,5 +94,12 @@ class User extends Authenticatable
     public function conversationsAsSupplier()
     {
         return $this->hasMany(Conversation::class, 'supplier_id');
+    }
+
+    public function chatGroups()
+    {
+        return $this->belongsToMany(ChatGroup::class, 'chat_group_members')
+            ->withPivot('last_read_at')
+            ->withTimestamps();
     }
 }

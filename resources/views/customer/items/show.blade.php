@@ -129,9 +129,7 @@
             <div class="bg-white border border-[#E3EAE3] rounded-2xl p-5">
                 <div class="text-[11px] font-bold uppercase tracking-wider text-[#647164] mb-3">Supplier</div>
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-[#166534] text-white grid place-items-center font-extrabold">
-                        {{ strtoupper(substr($item->supplier->name, 0, 2)) }}
-                    </div>
+                    <x-avatar :user="$item->supplier" :size="48" rounded="2xl" />
                     <div class="min-w-0">
                         <div class="font-bold truncate">{{ $item->supplier->name }}</div>
                         <div class="text-xs text-[#647164] truncate">

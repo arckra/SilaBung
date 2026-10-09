@@ -257,6 +257,7 @@ html.dark .theme-preview-light > div {
         : [
             ['route' => 'customer.dashboard',      'icon' => 'home',    'label' => 'Dashboard'],
             ['route' => 'customer.search',         'icon' => 'search',  'label' => 'Jelajahi Barang'],
+            ['route' => 'customer.wishlist.index', 'icon' => 'package', 'label' => 'Wishlist'],
             ['route' => 'customer.requests.index', 'icon' => 'inbox',   'label' => 'Permintaan Saya'],
             ['route' => 'customer.favorites',      'icon' => 'heart',   'label' => 'Favorit'],
             ['route' => 'profile.edit',            'icon' => 'settings','label' => 'Pengaturan'],
@@ -267,6 +268,12 @@ html.dark .theme-preview-light > div {
     $unreadChat = \App\Models\Message::whereHas('conversation', function ($q) use ($user) {
         $q->where($user->isSupplier() ? 'supplier_id' : 'customer_id', $user->id);
     })->where('sender_id', '!=', $user->id)->whereNull('read_at')->count();
+
+    // Tambah unread grup
+    $myGroups = \App\Models\ChatGroup::whereHas('members', fn ($q) => $q->where('users.id', $user->id))->get();
+    foreach ($myGroups as $g) {
+        $unreadChat += $g->unreadFor($user->id);
+    }
 @endphp
 
 <div class="flex min-h-screen">
@@ -343,9 +350,7 @@ html.dark .theme-preview-light > div {
                 <div class="relative" id="profileDropdownWrap">
                     <button type="button" onclick="toggleProfileMenu(event)"
                             class="flex items-center gap-2 h-10 pl-1 pr-2.5 rounded-xl hover:bg-[#F0FDF4] transition group">
-                        <div class="w-8 h-8 rounded-full bg-[#166534] text-white grid place-items-center text-[11px] font-extrabold">
-                            {{ strtoupper(substr($user->name, 0, 2)) }}
-                        </div>
+                        <x-avatar :user="$user" :size="32" />
                         <div class="hidden sm:block text-left leading-tight">
                             <div class="text-[12px] font-bold truncate max-w-[110px]">{{ $user->name }}</div>
                         </div>
@@ -358,9 +363,7 @@ html.dark .theme-preview-light > div {
                          class="hidden absolute right-0 top-[calc(100%+8px)] w-[240px] bg-white border border-[#E3EAE3] rounded-xl shadow-xl overflow-hidden z-50">
                         <div class="px-4 py-3.5 border-b border-[#E3EAE3] bg-[#FBFDFB]">
                             <div class="flex items-center gap-2.5">
-                                <div class="w-10 h-10 rounded-full bg-[#166534] text-white grid place-items-center text-sm font-extrabold shrink-0">
-                                    {{ strtoupper(substr($user->name, 0, 2)) }}
-                                </div>
+                                <x-avatar :user="$user" :size="40" />
                                 <div class="min-w-0">
                                     <div class="text-[13px] font-bold truncate">{{ $user->name }}</div>
                                     <div class="text-[11px] text-[#647164] truncate">{{ $user->email }}</div>
@@ -382,32 +385,6 @@ html.dark .theme-preview-light > div {
                                 <x-icon name="leaf" :size="15" /> Beranda
                             </a>
                         </div>
-
-                        <div class="px-4 py-3 border-t border-[#E3EAE3]">
-                            <div class="text-[10px] font-extrabold uppercase tracking-widest text-[#647164] mb-2">
-                                Tema
-                            </div>
-                            <div class="flex gap-1.5">
-                                <button type="button" onclick="setTheme('light')"
-                                        data-theme-option="light"
-                                        class="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg border border-[#E3EAE3] text-[11px] font-bold text-[#172117] hover:bg-[#F0FDF4] transition">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="4"/>
-                                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-                                    </svg>
-                                    Terang
-                                </button>
-                                <button type="button" onclick="setTheme('dark')"
-                                        data-theme-option="dark"
-                                        class="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg border border-[#E3EAE3] text-[11px] font-bold text-[#172117] hover:bg-[#F0FDF4] transition">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                                    </svg>
-                                    Gelap
-                                </button>
-                            </div>
-                        </div>
-
                         <div class="py-1.5 border-t border-[#E3EAE3]">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

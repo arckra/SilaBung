@@ -16,9 +16,66 @@
 
     {{-- ============ HEADER PROFIL ============ --}}
     <div class="bg-white border border-[#E3EAE3] rounded-2xl p-5 flex items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-[#166534] text-white grid place-items-center text-lg font-extrabold shrink-0">
-            {{ strtoupper(substr($user->name, 0, 2)) }}
+        <div class="bg-white border border-[#E3EAE3] rounded-2xl p-5">
+        <div class="flex items-center gap-4 flex-wrap">
+
+            {{-- Avatar --}}
+            <div class="relative shrink-0">
+                <x-avatar :user="$user" :size="80" rounded="2xl" />
+
+                {{-- Ikon pensil kecil di pojok avatar --}}
+                <button type="button"
+                        onclick="document.getElementById('avatarInput').click()"
+                        class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white border border-[#E3EAE3] grid place-items-center text-[#647164] hover:bg-[#F0FDF4] hover:text-[#166534] transition shadow-sm"
+                        title="{{ $user->avatar_url ? 'Ganti foto' : 'Upload foto' }}">
+                    <x-icon name="edit" :size="12" />
+                </button>
+            </div>
+
+            {{-- Tombol Ganti Foto & Hapus Foto --}}
+            <div class="flex gap-2">
+            {{-- Edit / Upload --}}
+            <button type="button"
+                    onclick="document.getElementById('avatarInput').click()"
+                    class="w-10 h-10 rounded-xl bg-[#DCFCE7] text-[#166534] grid place-items-center hover:bg-[#bbf7d0] transition"
+                    title="{{ $user->avatar_url ? 'Ganti foto' : 'Upload foto' }}">
+                <x-icon name="edit" :size="16" />
+            </button>
+
+            {{-- Delete (hanya kalau sudah ada foto) --}}
+            @if ($user->avatar_url)
+                <form method="POST" action="{{ route('profile.avatar.destroy') }}"
+                      onsubmit="return confirm('Hapus foto profil?')">
+                    @csrf @method('DELETE')
+                    <button type="submit"
+                            class="w-10 h-10 rounded-xl border border-red-200 bg-red-50 text-red-600 grid place-items-center hover:bg-red-100 transition"
+                            title="Hapus foto">
+                        <x-icon name="trash" :size="16" />
+                    </button>
+                </form>
+            @endif
         </div>
+        </div>
+
+        {{-- Form upload (hidden) --}}
+        <form method="POST" action="{{ route('profile.avatar.update') }}"
+              enctype="multipart/form-data" class="hidden">
+            @csrf
+            <input type="file" name="avatar" id="avatarInput" accept="image/*"
+                   onchange="this.form.submit()">
+        </form>
+
+        @if (session('status') === 'avatar-updated')
+            <div class="mt-4 px-3.5 py-2.5 rounded-xl bg-[#DCFCE7] border border-green-200 text-[#166534] text-xs font-semibold flex items-center gap-2">
+                <x-icon name="check" :size="14" /> Foto profil berhasil diperbarui.
+            </div>
+        @endif
+        @if (session('status') === 'avatar-removed')
+            <div class="mt-4 px-3.5 py-2.5 rounded-xl bg-[#DCFCE7] border border-green-200 text-[#166534] text-xs font-semibold flex items-center gap-2">
+                <x-icon name="check" :size="14" /> Foto profil dihapus.
+            </div>
+        @endif
+    </div>
         <div class="min-w-0 flex-1">
             <div class="font-extrabold tracking-tight truncate text-[15px]">{{ $user->name }}</div>
             <div class="text-xs text-[#647164] truncate">{{ $user->email }}</div>

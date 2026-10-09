@@ -6,6 +6,8 @@ use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\ChatGroup;
+use App\Models\GroupMessage;
 
 class ChatController extends Controller
 {
@@ -25,23 +27,31 @@ class ChatController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
+        // BARU: ambil grup
+        $groups = ChatGroup::with('members')
+            ->whereHas('members', fn ($q) => $q->where('users.id', $user->id))
+            ->orderByDesc('last_message_at')
+            ->orderByDesc('created_at')
+            ->get();
+
         $activeId = $request->query('c');
         $active   = null;
+        $activeGroupId = null;
 
         if ($activeId) {
             $active = $conversations->firstWhere('id', (int) $activeId);
-            if (! $active) {
-                return redirect()->route('chat.index');
-            }
+            if (! $active) return redirect()->route('chat.index');
 
-            // Tandai pesan masuk sebagai sudah dibaca
             Message::where('conversation_id', $active->id)
                 ->where('sender_id', '!=', $user->id)
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
         }
 
-        return view('chat.index', compact('conversations', 'active', 'activeId', 'user'));
+        return view('chat.index', compact(
+            'conversations', 'active', 'activeId',
+            'groups', 'activeGroupId', 'user'
+        ));
     }
 
     /**
@@ -184,6 +194,110 @@ class ChatController extends Controller
         }
 
         return redirect()->route('chat.index', ['c' => $conversation->id]);
+    }
+
+    public function groupPage(ChatGroup $group)
+    {
+        $this->authorizeGroupAccess($group);
+
+        $user = auth()->user();
+        $group->load(['members', 'messages.sender', 'demandList']);
+
+        // Tandai sudah dibaca
+        $group->markReadBy($user->id);
+
+        // Ambil juga daftar percakapan + grup untuk sidebar
+        $conversations = Conversation::with(['customer', 'supplier', 'item'])
+            ->where(fn ($q) => $user->isCustomer()
+                ? $q->where('customer_id', $user->id)
+                : $q->where('supplier_id', $user->id))
+            ->orderByDesc('last_message_at')
+            ->get();
+
+        $groups = ChatGroup::with('members')
+            ->whereHas('members', fn ($q) => $q->where('users.id', $user->id))
+            ->orderByDesc('last_message_at')
+            ->orderByDesc('created_at')
+            ->get();
+
+        $activeGroupId = $group->id;
+        $activeId      = null;
+        $active        = null;
+
+        return view('chat.index', compact(
+            'conversations', 'active', 'activeId',
+            'groups', 'activeGroupId', 'user'
+        ));
+    }
+
+    /* ============ JSON: pesan grup ============ */
+    public function groupMessages(ChatGroup $group)
+    {
+        $this->authorizeGroupAccess($group);
+
+        $userId = auth()->id();
+        $group->markReadBy($userId);
+
+        $messages = $group->messages()
+            ->with('sender')
+            ->orderBy('created_at')
+            ->get()
+            ->map(fn (GroupMessage $m) => [
+                'id'         => $m->id,
+                'body'       => $m->body,
+                'is_mine'    => $m->sender_id === $userId,
+                'sender'     => $m->sender->name,
+                'initials'   => strtoupper(substr($m->sender->name, 0, 2)),
+                'avatar_url' => $m->sender->avatar_url,
+                'time'       => $m->created_at->format('H:i'),
+                'date'       => $m->created_at->translatedFormat('d M Y'),
+            ]);
+
+        return response()->json([
+            'group_id'  => $group->id,
+            'group_name'=> $group->name,
+            'members'   => $group->members->map(fn ($m) => [
+                'id'       => $m->id,
+                'name'     => $m->name,
+                'initials' => strtoupper(substr($m->name, 0, 2)),
+                'is_me'    => $m->id === $userId,
+            ]),
+            'messages'  => $messages,
+        ]);
+    }
+
+    /* ============ Kirim pesan grup ============ */
+    public function groupSend(Request $request, ChatGroup $group)
+    {
+        $this->authorizeGroupAccess($group);
+
+        $data = $request->validate([
+            'body' => ['required', 'string', 'max:2000'],
+        ], [
+            'body.required' => 'Pesan tidak boleh kosong.',
+        ]);
+
+        $message = GroupMessage::create([
+            'chat_group_id' => $group->id,
+            'sender_id'     => auth()->id(),
+            'body'          => trim($data['body']),
+        ]);
+
+        $group->update(['last_message_at' => now()]);
+
+        return response()->json([
+            'id'      => $message->id,
+            'body'    => $message->body,
+            'is_mine' => true,
+            'time'    => $message->created_at->format('H:i'),
+            'date'    => $message->created_at->translatedFormat('d M Y'),
+        ]);
+    }
+
+    /* ============ Update method page() untuk sertakan groups ============ */
+    protected function authorizeGroupAccess(ChatGroup $group): void
+    {
+        abort_unless($group->hasMember(auth()->id()), 403, 'Kamu bukan anggota grup ini.');
     }
 
     /**
