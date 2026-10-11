@@ -252,7 +252,6 @@ html.dark .theme-preview-light > div {
             ['route' => 'supplier.items.index',    'icon' => 'package', 'label' => 'Barang Saya'],
             ['route' => 'supplier.items.create',   'icon' => 'plus',    'label' => 'Tambah Barang'],
             ['route' => 'supplier.requests.index', 'icon' => 'inbox',   'label' => 'Permintaan Masuk'],
-            ['route' => 'profile.edit',            'icon' => 'settings','label' => 'Pengaturan'],
         ]
         : [
             ['route' => 'customer.dashboard',      'icon' => 'home',    'label' => 'Dashboard'],
@@ -260,7 +259,6 @@ html.dark .theme-preview-light > div {
             ['route' => 'customer.wishlist.index', 'icon' => 'package', 'label' => 'Wishlist'],
             ['route' => 'customer.requests.index', 'icon' => 'inbox',   'label' => 'Permintaan Saya'],
             ['route' => 'customer.favorites',      'icon' => 'heart',   'label' => 'Favorit'],
-            ['route' => 'profile.edit',            'icon' => 'settings','label' => 'Pengaturan'],
         ];
 
     $mobileNav = array_slice($nav, 0, 4);
@@ -332,6 +330,18 @@ html.dark .theme-preview-light > div {
             <div class="flex items-center gap-1.5">
                 @yield('page-actions')
 
+                {{-- Mobile-only: Favorit & Pengaturan --}}
+                <div class="lg:hidden flex items-center gap-0.5">
+                    @if ($role === 'customer')
+                        <a href="{{ route('customer.favorites') }}"
+                           class="w-10 h-10 rounded-xl grid place-items-center transition
+                                  {{ request()->routeIs('customer.favorites') ? 'bg-[#DCFCE7] text-[#166534]' : 'text-[#647164] hover:bg-[#F0FDF4] hover:text-[#166534]' }}"
+                           title="Favorit">
+                            <x-icon name="heart" :size="18" />
+                        </a>
+                    @endif
+                </div>
+
                 {{-- Bell = link ke halaman chat --}}
                 <a href="{{ route('chat.index') }}"
                    class="relative w-10 h-10 rounded-xl grid place-items-center transition
@@ -370,11 +380,10 @@ html.dark .theme-preview-light > div {
                                 </div>
                             </div>
                         </div>
-
                         <div class="py-1.5">
                             <a href="{{ route('profile.edit') }}"
                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#172117] hover:bg-[#F0FDF4] hover:text-[#166534] transition">
-                                <x-icon name="user" :size="15" /> Profil Saya
+                                <x-icon name="settings" :size="15" /> Pengaturan
                             </a>
                             <a href="{{ route('dashboard') }}"
                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#172117] hover:bg-[#F0FDF4] hover:text-[#166534] transition">
