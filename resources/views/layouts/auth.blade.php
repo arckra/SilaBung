@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Masuk') — SILABUNG</title>
+    <title>SILABUNG</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,12 +33,9 @@
 
         {{-- Logo --}}
         <a href="{{ route('home') }}" class="relative flex items-center gap-3 w-fit">
-            <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur grid place-items-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
-                    <path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
-                </svg>
-            </div>
+            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+                alt="Logo SILABUNG" 
+                class="w-9 h-9 object-contain shrink-0">
             <div>
                 <div class="font-extrabold tracking-tight text-[17px] leading-tight">SILABUNG</div>
                 <div class="text-[11px] text-white/70 font-semibold tracking-wide">Sirkula Sambung</div>

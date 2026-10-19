@@ -49,6 +49,7 @@ Route::middleware(['auth', 'role:customer'])
         Route::patch('/requests/{request}/cancel', [CustomerRequest::class, 'cancel'])->name('requests.cancel');
         Route::get('/favorites', [CustomerFavorite::class, 'index'])->name('favorites');
         Route::post('/items/{item}/favorite', [CustomerFavorite::class, 'toggle'])->name('items.favorite');
+        Route::post('/items/{item}/unfavorite', [\App\Http\Controllers\Customer\FavoriteController::class, 'unfavorite'])->name('items.unfavorite');
 
         Route::get('/wishlist',                        [\App\Http\Controllers\Customer\DemandListController::class, 'index'])->name('wishlist.index');
         Route::get('/wishlist/create',                 [\App\Http\Controllers\Customer\DemandListController::class, 'create'])->name('wishlist.create');
@@ -82,18 +83,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
-Route::middleware(['auth'])
-    ->prefix('chat')
-    ->name('chat.')
-    ->group(function () {
-        Route::get('/group/{group}',          [\App\Http\Controllers\ChatController::class, 'groupPage'])->name('group');
-        Route::get('/group/{group}/messages', [\App\Http\Controllers\ChatController::class, 'groupMessages'])->name('group.messages');
-        Route::post('/group/{group}/send',    [\App\Http\Controllers\ChatController::class, 'groupSend'])->name('group.send');
-
-        Route::get('/',                       [\App\Http\Controllers\ChatController::class, 'page'])->name('index');
-        Route::get('/list',                   [\App\Http\Controllers\ChatController::class, 'list'])->name('list');
-        Route::get('/{conversation}/messages',[\App\Http\Controllers\ChatController::class, 'messages'])->name('messages');
-        Route::post('/{conversation}/send',   [\App\Http\Controllers\ChatController::class, 'send'])->name('send');
-        Route::post('/start',                 [\App\Http\Controllers\ChatController::class, 'start'])->name('start');
-    });

@@ -3,6 +3,9 @@
 
 <style id="silabung-dark-css">
 
+html.dark .bg-\[\#F8FAF8\]\/95 {
+    background-color: rgba(13, 19, 13, .95) !important;
+}
 html.dark .theme-preview-light {
     background-color: #F8FAF8 !important;
 }
@@ -215,12 +218,78 @@ html.dark .theme-preview-light > div {
     html.dark .bg-white\/95 {
         background-color: rgba(26, 33, 25, .95) !important;
     }
+    /* ============================================================
+       SIDEBAR COLLAPSE
+       ============================================================ */
+    .sidebar {
+        transition: width .22s cubic-bezier(.2,.9,.3,1);
+    }
+    .sidebar.collapsed {
+        width: 76px;
+    }
+    .sidebar.collapsed .sidebar-label,
+    .sidebar.collapsed .sidebar-brand-text,
+    .sidebar.collapsed .sidebar-tagline,
+    .sidebar.collapsed .sidebar-user-info {
+        display: none;
+    }
+    .sidebar.collapsed .sidebar-brand {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .sidebar.collapsed .side-link {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .sidebar.collapsed .sidebar-toggle-icon {
+        transform: rotate(180deg);
+    }
+    .sidebar.collapsed .sidebar-bottom {
+        display: none;
+    }
+
+    /* Tooltip saat collapsed */
+    .sidebar.collapsed .side-link {
+        position: relative;
+    }
+    .sidebar.collapsed .side-link::after {
+        content: attr(data-label);
+        position: absolute;
+        left: calc(100% + 10px);
+        top: 50%;
+        transform: translateY(-50%) translateX(-6px);
+        background: #172117;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .15s ease, transform .15s ease;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+    .sidebar.collapsed .side-link:hover::after {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+
+    /* Dark mode */
+    html.dark .sidebar.collapsed .side-link::after {
+        background: #E7EFE7;
+        color: #172117;
+    }
 </style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — SILABUNG</title>
+    <title>SILABUNG</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -255,7 +324,6 @@ html.dark .theme-preview-light > div {
         ]
         : [
             ['route' => 'customer.dashboard',      'icon' => 'home',    'label' => 'Dashboard'],
-            ['route' => 'customer.search',         'icon' => 'search',  'label' => 'Jelajahi Barang'],
             ['route' => 'customer.wishlist.index', 'icon' => 'package', 'label' => 'Wishlist'],
             ['route' => 'customer.requests.index', 'icon' => 'inbox',   'label' => 'Permintaan Saya'],
             ['route' => 'customer.favorites',      'icon' => 'heart',   'label' => 'Favorit'],
@@ -263,26 +331,17 @@ html.dark .theme-preview-light > div {
 
     $mobileNav = array_slice($nav, 0, 4);
 
-    $unreadChat = \App\Models\Message::whereHas('conversation', function ($q) use ($user) {
-        $q->where($user->isSupplier() ? 'supplier_id' : 'customer_id', $user->id);
-    })->where('sender_id', '!=', $user->id)->whereNull('read_at')->count();
-
-    // Tambah unread grup
-    $myGroups = \App\Models\ChatGroup::whereHas('members', fn ($q) => $q->where('users.id', $user->id))->get();
-    foreach ($myGroups as $g) {
-        $unreadChat += $g->unreadFor($user->id);
-    }
 @endphp
 
 <div class="flex min-h-screen">
 
     {{-- ===================== SIDEBAR KIRI ===================== --}}
-    <aside class="hidden lg:flex w-[240px] shrink-0 flex-col bg-white border-r border-[#E3EAE3] sticky top-0 h-screen p-3.5">
-        <a href="{{ route('home') }}" class="flex items-center gap-2.5 px-2.5 pt-2 pb-6">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#16A34A] to-[#166534] grid place-items-center text-white shadow-md shadow-green-500/25">
-                <x-icon name="leaf" :size="17" />
-            </div>
-            <div class="leading-tight">
+    <aside id="sidebar" class="sidebar hidden lg:flex w-[250px] shrink-0 flex-col bg-white border-r border-[#E3EAE3] sticky top-0 h-screen p-3.5">
+        <a href="{{ route('home') }}" class="sidebar-brand flex items-center gap-2.5 px-2.5 pt-2 pb-6">
+            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+                alt="Logo SILABUNG" 
+                class="w-9 h-9 object-contain shrink-0">
+            <div class="sidebar-brand-text leading-tight">
                 <div class="font-extrabold tracking-tight text-[15px]">SILABUNG</div>
                 <div class="text-[10px] text-[#647164] font-semibold tracking-wide">Sirkula Sambung</div>
             </div>
@@ -292,18 +351,19 @@ html.dark .theme-preview-light > div {
             @foreach ($nav as $item)
                 @php $active = request()->routeIs($item['route']); @endphp
                 <a href="{{ route($item['route']) }}"
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition
+                   data-label="{{ $item['label'] }}"
+                   class="side-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition
                           {{ $active
                               ? 'bg-[#DCFCE7] text-[#166534] font-bold'
                               : 'text-[#647164] hover:bg-[#F0FDF4] hover:text-[#166534]' }}">
                     <x-icon :name="$item['icon']" :size="17" />
-                    {{ $item['label'] }}
+                    <span class="sidebar-label">{{ $item['label'] }}</span>
                 </a>
             @endforeach
         </nav>
 
-        {{-- Bawah: ilustrasi + tagline --}}
-        <div class="border-t border-[#E3EAE3] pt-4 mt-3 px-2 relative overflow-hidden">
+        {{-- Tagline --}}
+        <div class="sidebar-bottom border-t border-[#E3EAE3] pt-4 mt-3 px-2 relative overflow-hidden">
             <div class="absolute -bottom-8 -right-6 w-24 h-24 rounded-full bg-[#DCFCE7] opacity-40"></div>
             <svg viewBox="0 0 40 40" class="w-9 h-9 text-[#16A34A] mb-3 relative">
                 <path d="M20 34C12 30 8 22 10 12c8-2 18 2 22 10-2 8-6 12-12 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
@@ -312,6 +372,19 @@ html.dark .theme-preview-light > div {
             <p class="text-[11px] text-[#647164] leading-relaxed relative">
                 Barang yang kamu gunakan hari ini, bisa jadi manfaat untuk esok.
             </p>
+        </div>
+
+        {{-- Tombol toggle collapse --}}
+        <div class="border-t border-[#E3EAE3] pt-3 mt-3">
+            <button type="button"
+                    onclick="toggleSidebar()"
+                    class="side-link w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#647164] hover:bg-[#F0FDF4] hover:text-[#166534] transition"
+                    title="Kecilkan / besarkan sidebar">
+                <svg class="sidebar-toggle-icon transition-transform" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                <span class="sidebar-label">Kecilkan</span>
+            </button>
         </div>
     </aside>
 
@@ -329,33 +402,6 @@ html.dark .theme-preview-light > div {
 
             <div class="flex items-center gap-1.5">
                 @yield('page-actions')
-
-                {{-- Mobile-only: Favorit & Pengaturan --}}
-                <div class="lg:hidden flex items-center gap-0.5">
-                    @if ($role === 'customer')
-                        <a href="{{ route('customer.favorites') }}"
-                           class="w-10 h-10 rounded-xl grid place-items-center transition
-                                  {{ request()->routeIs('customer.favorites') ? 'bg-[#DCFCE7] text-[#166534]' : 'text-[#647164] hover:bg-[#F0FDF4] hover:text-[#166534]' }}"
-                           title="Favorit">
-                            <x-icon name="heart" :size="18" />
-                        </a>
-                    @endif
-                </div>
-
-                {{-- Bell = link ke halaman chat --}}
-                <a href="{{ route('chat.index') }}"
-                   class="relative w-10 h-10 rounded-xl grid place-items-center transition
-                          {{ request()->routeIs('chat.*') ? 'bg-[#DCFCE7] text-[#166534]' : 'text-[#647164] hover:bg-[#F0FDF4] hover:text-[#166534]' }}">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    @if ($unreadChat > 0)
-                        <span class="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-extrabold grid place-items-center border-2 border-white">
-                            {{ $unreadChat > 9 ? '9+' : $unreadChat }}
-                        </span>
-                    @endif
-                </a>
-
                 {{-- Profile dropdown --}}
                 <div class="relative" id="profileDropdownWrap">
                     <button type="button" onclick="toggleProfileMenu(event)"
@@ -384,10 +430,6 @@ html.dark .theme-preview-light > div {
                             <a href="{{ route('profile.edit') }}"
                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#172117] hover:bg-[#F0FDF4] hover:text-[#166534] transition">
                                 <x-icon name="settings" :size="15" /> Pengaturan
-                            </a>
-                            <a href="{{ route('dashboard') }}"
-                               class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#172117] hover:bg-[#F0FDF4] hover:text-[#166534] transition">
-                                <x-icon name="home" :size="15" /> Dashboard
                             </a>
                             <a href="{{ route('home') }}"
                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#172117] hover:bg-[#F0FDF4] hover:text-[#166534] transition">
@@ -457,9 +499,6 @@ html.dark .theme-preview-light > div {
 </nav>
 
 <script>
-    /* ============================================================
-       Theme toggle
-       ============================================================ */
     window.setTheme = function (mode) {
         const root = document.documentElement;
         if (mode === 'dark') {
@@ -497,6 +536,27 @@ html.dark .theme-preview-light > div {
         document.querySelectorAll('[data-theme-label]').forEach(el => {
             el.textContent = cur === 'dark' ? 'Gelap' : 'Terang';
         });
+    });
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (!sidebar) return;
+
+        const isCollapsed = sidebar.classList.toggle('collapsed');
+
+        try {
+            localStorage.setItem('silabung-sidebar', isCollapsed ? 'collapsed' : 'expanded');
+        } catch (e) {}
+    }
+
+    // Restore state saat load
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            const state = localStorage.getItem('silabung-sidebar');
+            if (state === 'collapsed') {
+                document.getElementById('sidebar')?.classList.add('collapsed');
+            }
+        } catch (e) {}
     });
 </script>
 

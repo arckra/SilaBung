@@ -9,9 +9,6 @@ use App\Support\Geo;
 
 class FavoriteController extends Controller
 {
-    /**
-     * Daftar barang favorit milik customer yang login.
-     */
     public function index()
     {
         $user   = auth()->user();
@@ -34,11 +31,6 @@ class FavoriteController extends Controller
 
         return view('customer.favorites.index', compact('items'));
     }
-
-    /**
-     * Toggle favorit — kalau sudah ada, hapus. Kalau belum, tambah.
-     * Return JSON supaya bisa dipanggil dari fetch() tanpa reload.
-     */
     public function toggle(Item $item)
     {
         $user = auth()->user();
@@ -49,20 +41,34 @@ class FavoriteController extends Controller
 
         if ($existing) {
             $existing->delete();
+            $favorited = false;
+            $message   = 'Dihapus dari favorit.';
+        } else {
+            Favorite::create([
+                'user_id' => $user->id,
+                'item_id' => $item->id,
+            ]);
+            $favorited = true;
+            $message   = 'Ditambahkan ke favorit.';
+        }
+
+        // Kalau request dari fetch/AJAX → JSON
+        if (request()->expectsJson() || request()->ajax()) {
             return response()->json([
-                'favorited' => false,
-                'message'   => 'Dihapus dari favorit.',
+                'favorited' => $favorited,
+                'message'   => $message,
             ]);
         }
 
-        Favorite::create([
-            'user_id' => $user->id,
-            'item_id' => $item->id,
-        ]);
+        // Kalau dari form submit native → redirect back dengan flash
+        return back()->with('success', $message);
+    }
+    public function unfavorite(Item $item)
+    {
+        Favorite::where('user_id', auth()->id())
+            ->where('item_id', $item->id)
+            ->delete();
 
-        return response()->json([
-            'favorited' => true,
-            'message'   => 'Ditambahkan ke favorit.',
-        ]);
+        return back()->with('success', 'Dihapus dari favorit.');
     }
 }

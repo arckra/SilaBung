@@ -13,6 +13,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'avatar_path',
         'role',
@@ -101,5 +102,20 @@ class User extends Authenticatable
         return $this->belongsToMany(ChatGroup::class, 'chat_group_members')
             ->withPivot('last_read_at')
             ->withTimestamps();
+    }
+
+    public function getWhatsappNumberAttribute(): ?string
+    {
+        if (! $this->phone) return null;
+
+        // Hilangkan karakter selain angka
+        $number = preg_replace('/[^0-9]/', '', $this->phone);
+
+        // Ubah awalan 0 menjadi 62
+        if (str_starts_with($number, '0')) {
+            $number = '62' . substr($number, 1);
+        }
+
+        return $number;
     }
 }

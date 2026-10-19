@@ -42,19 +42,23 @@
         @endif
 
         {{-- Tombol favorit --}}
-        <button type="button"
-                onclick="toggleFavorite(event, {{ $item->id }}, this)"
-                data-favorited="{{ $isFavorited ? '1' : '0' }}"
-                class="fav-btn absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/95 backdrop-blur border border-[#E3EAE3] grid place-items-center transition
-                       {{ $isFavorited ? 'text-red-500 border-red-200' : 'text-[#647164] hover:text-red-500 hover:border-red-200' }}"
-                title="{{ $isFavorited ? 'Hapus dari favorit' : 'Simpan ke favorit' }}"
-                aria-label="Favorit">
-            <svg width="15" height="15" viewBox="0 0 24 24"
-                 fill="{{ $isFavorited ? 'currentColor' : 'none' }}"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-        </button>
+        <form method="POST"
+              action="{{ route('customer.items.favorite', $item) }}"
+              style="position: absolute; top: 10px; right: 10px; z-index: 30; margin: 0;">
+            @csrf
+            <button type="submit"
+                    class="w-8 h-8 rounded-full bg-white/95 backdrop-blur border grid place-items-center transition hover:scale-110 cursor-pointer
+                           {{ $isFavorited ? 'text-red-500 border-red-200' : 'text-[#647164] border-[#E3EAE3] hover:text-red-500 hover:border-red-200' }}"
+                    title="{{ $isFavorited ? 'Hapus dari favorit' : 'Simpan ke favorit' }}"
+                    aria-label="Favorit">
+                <svg width="15" height="15" viewBox="0 0 24 24"
+                     fill="{{ $isFavorited ? 'currentColor' : 'none' }}"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     style="pointer-events: none;">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </button>
+        </form>
     </div>
 
     {{-- Body --}}

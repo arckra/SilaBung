@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SILABUNG — Sirkula Sambung | Barang tak terpakai, tetap tersambung manfaatnya.</title>
+    <title>SILABUNG — Sirkula Sambung</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
     <meta name="description" content="SILABUNG menghubungkan barang yang tidak lagi digunakan dengan orang yang membutuhkannya, agar dapat digunakan kembali atau didaur ulang.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -105,12 +106,9 @@
     <div class="max-w-6xl mx-auto px-5 sm:px-6 h-[68px] flex items-center justify-between gap-4">
         {{-- Logo --}}
         <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#16A34A] to-[#166534] grid place-items-center text-white shadow-md shadow-green-500/25">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
-                    <path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
-                </svg>
-            </div>
+            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+                alt="Logo SILABUNG" 
+                class="w-9 h-9 object-contain shrink-0">
             <div class="leading-tight">
                 <div class="font-extrabold tracking-tight text-[15px]">SILABUNG</div>
                 <div class="text-[10px] text-[#647164] font-semibold tracking-wide -mt-0.5">Sirkula Sambung</div>
@@ -501,12 +499,9 @@
             {{-- Brand --}}
             <div class="lg:col-span-2">
                 <div class="flex items-center gap-2.5 mb-4">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#16A34A] to-[#166534] grid place-items-center text-white">
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
-                            <path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
-                        </svg>
-                    </div>
+                    <img src="{{ asset('images/logo-silabung.png') }}" 
+                        alt="Logo SILABUNG" 
+                        class="w-9 h-9 object-contain shrink-0">
                     <div>
                         <div class="font-extrabold tracking-tight">SILABUNG</div>
                         <div class="text-[10px] text-[#647164] font-semibold tracking-wide">Sirkula Sambung</div>
@@ -540,12 +535,10 @@
 
         <div class="mt-12 pt-6 border-t border-[#E3EAE3] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#647164]">
             <div>© {{ date('Y') }} SILABUNG — Sirkula Sambung.</div>
-            <div class="flex items-center gap-1.5">
-                Dibuat untuk mendukung <span class="font-bold text-[#166534]">circular economy</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
-                </svg>
-            </div>
+            <div class="flex items-center gap-3">
+                <a href="#" class="hover:text-[#166534]">Kebijakan Privasi</a>
+                <span class="text-[#E3EAE3]">|</span>
+                <a href="#" class="hover:text-[#166534]">Syarat & Ketentuan</a>
         </div>
     </div>
 </footer>

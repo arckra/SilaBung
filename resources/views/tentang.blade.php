@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tentang Kami — SILABUNG</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
     <meta name="description" content="Kenapa kami membuat SILABUNG, apa yang kami kerjakan, dan siapa di belakangnya.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,12 +56,9 @@
 <nav class="sticky top-0 z-50 bg-[#F8FAF8]/90 backdrop-blur-md border-b border-[#E3EAE3]">
     <div class="max-w-5xl mx-auto px-5 h-[68px] flex items-center justify-between gap-4">
         <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#16A34A] to-[#166534] grid place-items-center text-white">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
-                    <path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
-                </svg>
-            </div>
+            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+                alt="Logo SILABUNG" 
+                class="w-9 h-9 object-contain shrink-0">
             <div class="leading-tight">
                 <div class="font-extrabold tracking-tight text-[15px]">SILABUNG</div>
                 <div class="text-[10px] text-[#647164] font-semibold tracking-wide -mt-0.5">Sirkula Sambung</div>

@@ -139,6 +139,16 @@
                             </div>
                         </div>
 
+                        <div>
+                            <label class="block text-xs font-bold mb-1.5">Nomor WhatsApp <span class="text-red-500">*</span></label>
+                            <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}"
+                                   placeholder="Contoh: 081234567890"
+                                   class="w-full h-11 px-3.5 rounded-xl border border-[#E3EAE3] focus:border-[#16A34A] focus:ring-2 focus:ring-green-500/15 outline-none text-sm">
+                            @error('phone')
+                                <p class="text-xs text-red-600 mt-1.5 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div class="grid sm:grid-cols-2 gap-3.5">
                             <div>
                                 <label class="block text-xs font-bold mb-1.5">Kota / Kecamatan</label>

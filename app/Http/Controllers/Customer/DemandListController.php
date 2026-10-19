@@ -139,12 +139,9 @@ class DemandListController extends Controller
                 ->with('error', 'Wishlist ini sudah pernah dikonfirmasi.');
         }
     
-        $wishlist->load(['items.allocations.item', 'items.category']);
+        $wishlist->load(['items.allocations.item']);
     
-        $supplierIds = [];
-        $chatPayload = null;
-    
-        DB::transaction(function () use ($wishlist, &$supplierIds, &$chatPayload) {
+        DB::transaction(function () use ($wishlist) {
             foreach ($wishlist->items as $line) {
                 foreach ($line->allocations->where('selected', true) as $a) {
                     ItemRequest::create([
@@ -154,60 +151,17 @@ class DemandListController extends Controller
                         'status'      => 'pending',
                         'note'        => "Dari wishlist: {$wishlist->title}",
                     ]);
-    
-                    $supplierIds[] = $a->supplier_id;
                 }
             }
-    
-            $supplierIds = array_values(array_unique($supplierIds));
     
             $wishlist->update([
                 'status'       => 'confirmed',
                 'confirmed_at' => now(),
             ]);
-    
-            // ============ BIKIN CHAT ============
-            if (count($supplierIds) === 1) {
-                // 1 supplier → DM biasa
-                $conversation = Conversation::firstOrCreate(
-                    [
-                        'customer_id' => auth()->id(),
-                        'supplier_id' => $supplierIds[0],
-                    ],
-                    ['item_id' => null]
-                );
-                $conversation->update(['last_message_at' => now()]);
-    
-                $chatPayload = ['type' => 'dm', 'id' => $conversation->id];
-            } elseif (count($supplierIds) >= 2) {
-                // 2+ supplier → grup baru
-                $group = ChatGroup::create([
-                    'demand_list_id' => $wishlist->id,
-                    'created_by'     => auth()->id(),
-                    'name'           => 'Wishlist: ' . $wishlist->title,
-                    'last_message_at'=> now(),
-                ]);
-    
-                $memberIds = array_merge([auth()->id()], $supplierIds);
-                $group->members()->attach($memberIds, ['last_read_at' => now()]);
-    
-                $chatPayload = ['type' => 'group', 'id' => $group->id];
-            }
         });
     
-        if (! $chatPayload) {
-            return redirect()->route('customer.wishlist.show', $wishlist)
-                ->with('error', 'Tidak ada supplier yang dipilih. Konfirmasi dibatalkan.');
-        }
-    
-        // Redirect ke chat
-        if ($chatPayload['type'] === 'dm') {
-            return redirect()->route('chat.index', ['c' => $chatPayload['id']])
-                ->with('success', 'Wishlist dikonfirmasi. Lanjutkan koordinasi dengan supplier.');
-        }
-    
-        return redirect()->route('chat.group', $chatPayload['id'])
-            ->with('success', 'Wishlist dikonfirmasi. Grup chat dengan semua supplier sudah dibuat.');
+        return redirect()->route('customer.wishlist.show', $wishlist)
+            ->with('success', 'Wishlist dikonfirmasi. Permintaan telah dikirim ke supplier.');
     }
 
     /* ============ DAFTAR WISHLIST ============ */
