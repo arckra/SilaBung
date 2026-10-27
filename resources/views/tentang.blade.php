@@ -48,6 +48,13 @@
         html.dark .divide-\[\#E3EAE3\] > :not([hidden]) ~ :not([hidden]) { border-color: #2A3A2A !important; }
         html.dark .hover\:bg-\[\#F0FDF4\]:hover { background-color: #1A2A1E !important; }
         html.dark .bg-white\/90 { background-color: rgba(26, 33, 25, .92) !important; }
+                /* Fix Navbar di Dark Mode */
+        html.dark .bg-\[\#F8FAF8\]\/90 {
+            background-color: rgba(13, 19, 13, .92) !important;
+        }
+        html.dark nav .text-\[\#172117\] {
+            color: #E7EFE7 !important;
+        }
     </style>
 </head>
 <body class="bg-[#F8FAF8] text-[#172117] antialiased">
