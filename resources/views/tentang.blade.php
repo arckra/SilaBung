@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tentang Kami — SILABUNG</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung3.png') }}">
     <meta name="description" content="Kenapa kami membuat SILABUNG, apa yang kami kerjakan, dan siapa di belakangnya.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +56,7 @@
 <nav class="sticky top-0 z-50 bg-[#F8FAF8]/90 backdrop-blur-md border-b border-[#E3EAE3]">
     <div class="max-w-5xl mx-auto px-5 h-[68px] flex items-center justify-between gap-4">
         <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+            <img src="{{ asset('images/logo_silabung3.png') }}" 
                 alt="Logo SILABUNG" 
                 class="w-9 h-9 object-contain shrink-0">
             <div class="leading-tight">

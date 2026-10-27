@@ -13,6 +13,7 @@ class ItemRequest extends Model
         'customer_id',
         'quantity',
         'status',
+        'pickup_code',
         'note',
         'responded_at',
     ];

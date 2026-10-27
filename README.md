@@ -1,62 +1,125 @@
-<<<<<<< HEAD
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌱 SILABUNG (Sirkula Sambung)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **"Barang tak terpakai, tetap tersambung manfaatnya."**
 
-## About Laravel
+SILABUNG adalah platform berbasis web yang dirancang untuk menghubungkan orang yang memiliki barang layak pakai namun sudah tidak digunakan (Supplier) dengan orang yang membutuhkannya (Customer). Berfokus pada prinsip *circular economy* (reuse & recycle), SILABUNG hadir sebagai solusi penumpukan barang di lingkungan kos dan rumah tangga.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 1. Inovasi dan Relevansi Solusi 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Masalah Nyata:**
+Mahasiswa sering kali menumpuk barang (pakaian, buku, peralatan) di kos atau rumah karena bingung harus menyalurkannya ke mana. Di sisi lain, mahasiswa perantau, keluarga kurang mampu, atau penghuni panti asuhan justru membutuhkan barang-barang tersebut. Kebutuhan ini tidak terpenuhi bukan karena tidak ada yang memberi, melainkan karena **pemberi dan penerima tidak saling terhubung**.
 
-## Learning Laravel
+**Solusi & Keunggulan SILABUNG:**
+1. **Bukan Marketplace Biasa:** Tidak ada transaksi uang/komisi. Fokus murni pada *resource matching* (pencocokan sumber daya).
+2. **Smart Matching Wishlist:** Fitur inovatif di mana Customer dapat menginput daftar kebutuhan (multi-item). Sistem akan otomatis mensortir dan mengalokasikan barang dari beberapa Supplier terdekat secara cerdas (menggunakan algoritma *greedy fill*).
+3. **Location-Based Discovery:** Menampilkan jarak (menggunakan rumus Haversine) dan peta interaktif (Leaflet) agar pengambilan barang lebih efisien.
+4. **Verifikasi Ketat (Anti-Fraud):** Memastikan Supplier adalah benar-benar mahasiswa/alumni kampus dengan memvalidasi dokumen (KTM/KRS/SKL) menggunakan **Digital Image Forensics (EXIF Metadata)**.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🎯 2. Kesesuaian dengan Kebutuhan Pengguna 
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+**Target Pengguna:**
+*   **Customer:** Mahasiswa (tugas/penelitian), pengrajin, komunitas, masyarakat umum.
+*   **Supplier:** Mahasiswa Universitas Pelita Bangsa (UPB) dan sekitarnya yang memiliki barang tak terpakai.
 
-## Agentic Development
+**Alur Pengguna (User Flow):**
+1. **Onboarding & Verifikasi:** User mendaftar -> Verifikasi Email (OTP 6 digit) -> Memilih Role (Customer/Supplier) -> Supplier wajib upload KTM/KRS.
+2. **Supplier Flow:** Tambah Barang -> Kelola Stok -> Terima/Tolak Permintaan -> Serah Terima via Kode Verifikasi.
+3. **Customer Flow:** Cari Barang / Buat Wishlist Pintar -> Ajukan Permintaan -> Chat via WhatsApp -> Ambil Barang menggunakan Kode Verifikasi.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## ⚙️ 3. Kualitas Teknis dan Fungsionalitas 
 
-php artisan boost:install
-```
+**Tech Stack:**
+*   **Framework:** Laravel 11 (PHP 8.2+)
+*   **Database:** MySQL
+*   **Frontend:** Tailwind CSS, Vanilla JavaScript
+*   **Maps API:** Leaflet.js + OpenStreetMap
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+**Arsitektur & Keamanan:**
+*   **Modular Code:** Menggunakan pola MVC (Model-View-Controller) Laravel yang rapi, dipisah berdasarkan domain (`Customer`, `Supplier`, `Auth`).
+*   **Reusable Components:** UI dibangun menggunakan Blade Components (`<x-avatar>`, `<x-item-card>`, dll) sehingga *maintainable*.
+*   **Keamanan Autentikasi:** Role-Based Access Control (RBAC) yang ketat, dilengkapi sistem verifikasi Email OTP.
+*   **Validasi Berlapis:** Backend (Laravel Validation) dan Frontend memastikan tidak ada *request* cacat yang masuk ke database.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🎨 4. Kualitas Desain UI/UX 
 
-## Code of Conduct
+*   **Desain System:** Menggunakan *Design Tokens* yang konsisten (Primary Green: `#16A34A`, Dark Green: `#166534`, Background: `#F8FAF8`) dan font modern (Plus Jakarta Sans).
+*   **Responsive & Mobile-First:** Tampilan dioptimalkan untuk HP (Bottom Navigation) dan Desktop (Sidebar). 
+*   **Dark Mode:** Mendukung mode gelap yang ramah mata, diimplementasikan menggunakan CSS override yang ringan.
+*   **Usability & Accessibility:** 
+    *   *Feedback* interaktif (Toast notifications, Modal konfirmasi).
+    *   *Empty States* yang ramah (tidak ada halaman kosong yang membingungkan).
+    *   Form input dilengkapi label yang jelas dan *focus states*.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📚 5. Dokumentasi dan Kelengkapan Proposal 
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 🚀 Cara Menjalankan Project (Local Development)
 
-## License
+**Prasyarat:** PHP >= 8.2, Composer, Node.js & NPM, MySQL (XAMPP/Laragon).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-=======
-# SilaBung
->>>>>>> bb8e53cb58926e4954993e33ddd15ba9db3ca354
+1. **Clone Repository:**
+    ```bash
+    git clone https://github.com/arckra/SilaBung.git
+    cd SilaBung
+    ```
+
+2. **Install Dependencies:**
+    ```bash
+    composer install
+    npm install
+    ```
+
+3. **Konfigurasi Environment:**
+Duplikat file .env.example menjadi .env.
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+Buka .env dan atur koneksi database serta konfigurasi email (SMTP Gmail/Mailtrap) untuk fitur OTP.
+
+4. **Migrasi Database & Storage Link:**
+    ```bash
+    php artisan migrate --seed
+    php artisan storage:link
+    ```
+
+5. **Build Frontend & Jalankan Server:**
+    ```bash
+    npm run build
+    php artisan serve
+    ```
+
+## 🔮 Proyeksi Pengembangan Sistem (Roadmap)
+Fase 2: Integrasi AI untuk klasifikasi gambar barang otomatis, fitur pickup delivery, dan sistem rating reputasi antar user.
+
+Fase 3: Kemitraan resmi dengan Bank Sampah setempat dan integrasi Dashboard Dampak Karbon (Carbon Footprint Calculator).
+
+## 📱 Prototype & Wireframe
+![Landing Page](public/images/wireframe/landing-page.png)
+![Login Page](public/images/wireframe/login.png)
+![register Page](public/images/wireframe/register.png)
+![Verification email Page](public/images/wireframe/Verifikasi-email.png)
+![Dashboard Page - Supplier](public/images/wireframe/dashboard-supp-page.png)
+![Dashboard Page - User](public/images/wireframe/dashboard-user-page.png)
+![Deskripsi Wireframe](public/images/wireframe/.png)
+![Deskripsi Wireframe](public/images/wireframe/.png)
+![Deskripsi Wireframe](public/images/wireframe/.png)
+![Deskripsi Wireframe](public/images/wireframe/.png)
+
+## 👨‍💻 Tim Pengembang
+Dibuat dengan ❤️ untuk Lomba Web Development.
+
+Ari Cakra Kurniawan - Full-Stack Developer
+
+Friska Pebriana Lestari - UI/UX Designer
+
+Nadia Aulina Safari - Product & Riset

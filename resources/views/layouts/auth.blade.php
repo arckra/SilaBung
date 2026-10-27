@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SILABUNG</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung3.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@
 
         {{-- Logo --}}
         <a href="{{ route('home') }}" class="relative flex items-center gap-3 w-fit">
-            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+            <img src="{{ asset('images/logo_silabung3.png') }}" 
                 alt="Logo SILABUNG" 
                 class="w-9 h-9 object-contain shrink-0">
             <div>

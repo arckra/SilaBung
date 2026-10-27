@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SILABUNG — Sirkula Sambung</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung3.png') }}">
     <meta name="description" content="SILABUNG menghubungkan barang yang tidak lagi digunakan dengan orang yang membutuhkannya, agar dapat digunakan kembali atau didaur ulang.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,7 +106,7 @@
     <div class="max-w-6xl mx-auto px-5 sm:px-6 h-[68px] flex items-center justify-between gap-4">
         {{-- Logo --}}
         <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+            <img src="{{ asset('images/logo_silabung3.png') }}" 
                 alt="Logo SILABUNG" 
                 class="w-9 h-9 object-contain shrink-0">
             <div class="leading-tight">
@@ -499,7 +499,7 @@
             {{-- Brand --}}
             <div class="lg:col-span-2">
                 <div class="flex items-center gap-2.5 mb-4">
-                    <img src="{{ asset('images/logo-silabung.png') }}" 
+                    <img src="{{ asset('images/logo_silabung3.png') }}" 
                         alt="Logo SILABUNG" 
                         class="w-9 h-9 object-contain shrink-0">
                     <div>

@@ -7,6 +7,8 @@ use App\Models\Item;
 use App\Models\ItemRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestStatusMail;
 
 class RequestController extends Controller
 {
@@ -75,6 +77,13 @@ class RequestController extends Controller
             'status'      => 'pending',
         ]);
 
+        try {
+            Mail::to($item->supplier->email)->send(new RequestStatusMail($newRequest, 'submitted', 'supplier'));
+        } catch (\Exception $e) {
+            // Abaikan error jika email gagal dikirim (misal internet mati)
+        }
+
+
         return redirect()
             ->route('customer.requests.index')
             ->with('success', 'Permintaan berhasil dikirim. Tunggu konfirmasi dari supplier ya.');
@@ -94,5 +103,20 @@ class RequestController extends Controller
         $request->update(['status' => 'cancelled']);
 
         return back()->with('success', 'Permintaan dibatalkan.');
+    }
+
+    public function complete(ItemRequest $request)
+    {
+        abort_unless($request->customer_id === auth()->id(), 403);
+    
+        if ($request->status !== 'accepted') {
+            return back()->with('error', 'Hanya permintaan yang sudah diterima yang bisa diselesaikan.');
+        }
+            $request->update(['status' => 'completed']);
+        try {
+            Mail::to($request->item->supplier->email)->send(new RequestStatusMail($request, 'completed', 'supplier'));
+        } catch (\Exception $e) {}
+    
+        return back()->with('success', 'Terima kasih! Pengambilan barang telah dikonfirmasi selesai.');
     }
 }

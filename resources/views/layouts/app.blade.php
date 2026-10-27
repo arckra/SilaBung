@@ -289,7 +289,7 @@ html.dark .theme-preview-light > div {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SILABUNG</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_silabung3.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -338,7 +338,7 @@ html.dark .theme-preview-light > div {
     {{-- ===================== SIDEBAR KIRI ===================== --}}
     <aside id="sidebar" class="sidebar hidden lg:flex w-[250px] shrink-0 flex-col bg-white border-r border-[#E3EAE3] sticky top-0 h-screen p-3.5">
         <a href="{{ route('home') }}" class="sidebar-brand flex items-center gap-2.5 px-2.5 pt-2 pb-6">
-            <img src="{{ asset('images/logo_silabung.jpg') }}" 
+            <img src="{{ asset('images/logo_silabung3.png') }}" 
                 alt="Logo SILABUNG" 
                 class="w-9 h-9 object-contain shrink-0">
             <div class="sidebar-brand-text leading-tight">

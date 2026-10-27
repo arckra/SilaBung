@@ -26,10 +26,13 @@ Route::view('/tentang', 'tentang')->name('tentang');
 Route::middleware('auth')->group(function () {
     Route::get('/onboarding/role',  [OnboardingController::class, 'show'])->name('onboarding.role');
     Route::post('/onboarding/role', [OnboardingController::class, 'store'])->name('onboarding.role.store');
+    Route::get('/verify-otp', [\App\Http\Controllers\Auth\OtpVerificationController::class, 'show'])->name('verification.otp');
+    Route::post('/verify-otp', [\App\Http\Controllers\Auth\OtpVerificationController::class, 'verify'])->name('verification.otp.verify');
+    Route::post('/verify-otp/resend', [\App\Http\Controllers\Auth\OtpVerificationController::class, 'resend'])->name('verification.otp.resend');
 });
 
 /* Dashboard router */
-Route::middleware('auth')->get('/dashboard', function () {
+Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     $u = auth()->user();
     if (! $u->hasSelectedRole()) return redirect()->route('onboarding.role');
     return $u->isSupplier()
@@ -38,7 +41,7 @@ Route::middleware('auth')->get('/dashboard', function () {
 })->name('dashboard');
 
 /* ============ CUSTOMER ============ */
-Route::middleware(['auth', 'role:customer'])
+Route::middleware(['auth', 'verified', 'role:customer'])
     ->prefix('customer')->name('customer.')
     ->group(function () {
         Route::get('/dashboard',    [CustomerDashboard::class, 'index'])->name('dashboard');
@@ -58,10 +61,11 @@ Route::middleware(['auth', 'role:customer'])
         Route::delete('/wishlist/{wishlist}',          [\App\Http\Controllers\Customer\DemandListController::class, 'destroy'])->name('wishlist.destroy');
         Route::post('/wishlist/{wishlist}/confirm',    [\App\Http\Controllers\Customer\DemandListController::class, 'confirm'])->name('wishlist.confirm');
         Route::post('/allocations/{allocation}/toggle',[\App\Http\Controllers\Customer\DemandListController::class, 'toggleAllocation'])->name('wishlist.toggle');
+        Route::patch('/requests/{request}/complete', [\App\Http\Controllers\Customer\RequestController::class, 'complete'])->name('requests.complete');
     });
 
 /* ============ SUPPLIER ============ */
-Route::middleware(['auth', 'role:supplier'])
+Route::middleware(['auth', 'verified', 'role:supplier'])
     ->prefix('supplier')->name('supplier.')
     ->group(function () {
         Route::get('/dashboard', [SupplierDashboard::class, 'index'])->name('dashboard');
@@ -81,5 +85,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/avatar',   [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
     Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
 });
+
 
 require __DIR__.'/auth.php';

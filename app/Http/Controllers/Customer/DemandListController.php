@@ -10,8 +10,8 @@ use App\Models\ItemRequest;
 use App\Services\DemandMatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\ChatGroup;
-use App\Models\Conversation;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestStatusMail;
 
 class DemandListController extends Controller
 {
@@ -144,16 +144,20 @@ class DemandListController extends Controller
         DB::transaction(function () use ($wishlist) {
             foreach ($wishlist->items as $line) {
                 foreach ($line->allocations->where('selected', true) as $a) {
-                    ItemRequest::create([
+                    $newReq = ItemRequest::create([
                         'item_id'     => $a->item_id,
                         'customer_id' => auth()->id(),
                         'quantity'    => $a->quantity,
                         'status'      => 'pending',
                         'note'        => "Dari wishlist: {$wishlist->title}",
                     ]);
+
+                    // Kirim email ke supplier masing-masing
+                    try {
+                        Mail::to($a->item->supplier->email)->send(new RequestStatusMail($newReq, 'submitted', 'supplier'));
+                    } catch (\Exception $e) {}
                 }
             }
-    
             $wishlist->update([
                 'status'       => 'confirmed',
                 'confirmed_at' => now(),

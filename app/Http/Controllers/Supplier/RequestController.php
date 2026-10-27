@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ItemRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestStatusMail;
 
 class RequestController extends Controller
 {
@@ -42,9 +44,6 @@ class RequestController extends Controller
         return view('supplier.requests.index', compact('requests', 'status', 'counts'));
     }
 
-    /**
-     * Terima permintaan — stok berkurang, status jadi accepted.
-     */
     public function accept(ItemRequest $itemRequest)
     {
         $this->authorizeOwnership($itemRequest);
@@ -69,19 +68,31 @@ class RequestController extends Controller
             $item->refreshStatus();
             $item->save();
 
+            // ==========================================
+            // GENERATE KODE UNIK: Format SLB-XX-1234
+            // ==========================================
+            $randomLetters = strtoupper(\Illuminate\Support\Str::random(2));
+            $randomNumbers = rand(1000, 9999);
+            $pickupCode    = "SLB-{$randomLetters}-{$randomNumbers}";
+
             // Update status request
             $itemRequest->update([
                 'status'       => 'accepted',
+                'pickup_code'  => $pickupCode, // <-- Variabel dipakai di sini
                 'responded_at' => now(),
             ]);
         });
 
+                // ... (di dalam DB::transaction) ...
+
+        try {
+            Mail::to($itemRequest->customer->email)->send(new RequestStatusMail($itemRequest, 'accepted', 'customer'));
+        } catch (\Exception $e) {}
+        
         return back()->with('success', "Permintaan diterima. Stok {$item->name} sekarang {$item->fresh()->quantity} {$item->unit}.");
     }
 
-    /**
-     * Tolak permintaan — stok tidak berubah.
-     */
+
     public function reject(ItemRequest $itemRequest)
     {
         $this->authorizeOwnership($itemRequest);
@@ -90,17 +101,19 @@ class RequestController extends Controller
             return back()->with('error', 'Permintaan ini sudah diproses sebelumnya.');
         }
 
-        $itemRequest->update([
+                $itemRequest->update([
             'status'       => 'rejected',
             'responded_at' => now(),
         ]);
 
+        try {
+            Mail::to($itemRequest->customer->email)->send(new RequestStatusMail($itemRequest, 'rejected', 'customer'));
+        } catch (\Exception $e) {}
+
+
         return back()->with('success', 'Permintaan ditolak. Stok tidak berubah.');
     }
 
-    /**
-     * Tandai permintaan selesai (barang sudah diambil customer).
-     */
     public function complete(ItemRequest $itemRequest)
     {
         $this->authorizeOwnership($itemRequest);
