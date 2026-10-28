@@ -112,7 +112,7 @@ Fase 3: Kemitraan resmi dengan Bank Sampah setempat dan integrasi Dashboard Damp
 ![Role Supplier](public/images/wireframe/supplier.jpg)
 ![Dashboard Page - Supplier](public/images/wireframe/dashboard-supp-page.png)
 ![Dashboard Page - User](public/images/wireframe/dashboard-user-page.png)
-![Wireframe Lainnya](https://www.figma.com/design/7UMEY9IZHICeJZhDOrMzgt/silabung?node-id=0-1&t=IVNjjmVVJ3EkRUF8-1)
+Silahkan Kunjungi [Web Wireframe](https://www.figma.com/design/7UMEY9IZHICeJZhDOrMzgt/silabung?node-id=0-1&t=IVNjjmVVJ3EkRUF8-1) untuk melihat lebih detail.
 
 ## 👨‍💻 Tim Pengembang
 Dibuat dengan ❤️ untuk Lomba Web Development.
