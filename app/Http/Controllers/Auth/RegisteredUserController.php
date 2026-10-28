@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
@@ -37,31 +37,27 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
-        // Generate OTP 6 digit
+    
+        // Generate OTP
         $otp = rand(100000, 999999);
-
-        // 1. Buat user TANPA OTP dulu
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+    
+        // SIMPAN KE SESSION (BUKAN DATABASE)
+        Session::put('pending_user', [
+            'name'       => $request->name,
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password), // Langsung hash password-nya
+            'otp'        => $otp,
+            'expires_at' => now()->addMinutes(15),
         ]);
-
-        // 2. Paksa simpan OTP ke database
-        $user->email_otp = $otp;
-        $user->email_otp_expires_at = now()->addMinutes(15);
-        $user->save();
-
-        // 3. Kirim Email
+    
+        // Kirim Email
         try {
-            Mail::to($user->email)->send(new \App\Mail\VerificationCodeMail($otp));
+            Mail::to($request->email)->send(new \App\Mail\VerificationCodeMail($otp));
         } catch (\Exception $e) {
             // Abaikan jika gagal kirim
         }
-
-        Auth::login($user);
-
+    
+        // Alihkan ke halaman OTP (Belum login)
         return redirect()->route('verification.otp');
     }
 }

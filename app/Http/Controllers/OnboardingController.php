@@ -81,41 +81,30 @@ class OnboardingController extends Controller
         return $this->redirectToDashboard($user);
     }
 
-    /**
-     * Fungsi Forensik untuk memeriksa EXIF Metadata gambar.
-     */
     private function checkExifMetadata($filePath)
     {
-        // Baca data EXIF dari gambar
         $exif = @exif_read_data($filePath);
 
-        // Jika tidak ada EXIF sama sekali (kemungkinan screenshot / WhatsApp)
+        // Jika tidak ada EXIF, kita Loloskan (tidak ditolak)
         if ($exif === false) {
-            return 'stripped';
+            return 'clean'; 
         }
 
-        // Daftar software editing yang sering dipakai untuk memalsukan dokumen
         $editingSoftwares = [
             'adobe photoshop', 'lightroom', 'snapseed', 'picsart', 
             'canva', 'pixlr', 'gimp', 'affinity photo', 'corel'
         ];
 
-        // Cek apakah gambar diedit menggunakan software di atas
         if (isset($exif['Software'])) {
             $software = strtolower($exif['Software']);
             foreach ($editingSoftwares as $tool) {
                 if (str_contains($software, $tool)) {
-                    return 'edited';
+                    return 'edited'; // Tetap tolak jika pakai software edit
                 }
             }
         }
 
-        // Cek apakah gambar benar-benar diambil dari kamera (punya nama pabrikan/model HP)
-        // Beberapa HP mungkin tidak menulis 'Make', jadi kita cek 'Make' ATAU 'Model'
-        if (!isset($exif['Make']) && !isset($exif['Model'])) {
-            return 'stripped'; // Anggap mencurigakan jika tidak ada info kamera
-        }
-
+        // Hapus pengecekan Make/Model agar webcam/kamera depan lolos
         return 'clean';
     }
 

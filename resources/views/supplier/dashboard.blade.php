@@ -72,7 +72,7 @@
     <div class="bg-white border border-[#E3EAE3] rounded-2xl mb-6">
         <x-empty-state icon="package" title="Belum ada barang"
             description="Yuk bagikan barang yang sudah tidak kamu gunakan."
-            actionLabel="Tambah Barang Pertamamu" :actionHref="route('supplier.items.create')" />
+        />
     </div>
 @else
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6" id="myItemsGrid">
@@ -147,31 +147,6 @@
 
 {{-- ===================== CTA + KATEGORI POPULER ===================== --}}
 <div class="grid md:grid-cols-[1.4fr_1fr] gap-4">
-
-    <div class="bg-gradient-to-br from-[#DCFCE7] via-[#F0FDF4] to-white border border-[#cfe6d5] rounded-2xl p-6 relative overflow-hidden">
-        <div class="absolute -right-10 -bottom-16 w-44 h-44 opacity-40 pointer-events-none">
-            <svg viewBox="0 0 200 200" class="w-full h-full">
-                <path d="M100 20 C130 50 130 150 100 180 C70 150 70 50 100 20 Z" fill="#16A34A" opacity="0.15"/>
-                <circle cx="100" cy="100" r="60" fill="none" stroke="#16A34A" stroke-width="2" opacity="0.3" stroke-dasharray="6 6"/>
-            </svg>
-        </div>
-        <div class="relative max-w-xs">
-            <div class="w-10 h-10 rounded-xl bg-white grid place-items-center text-[#166534] mb-4">
-                <x-icon name="gift" :size="18" />
-            </div>
-            <h3 class="text-lg font-extrabold tracking-tight leading-tight mb-2">
-                Yuk bagikan lebih banyak barang
-            </h3>
-            <p class="text-xs text-[#647164] leading-relaxed mb-4">
-                Semakin banyak barang yang kamu bagikan, semakin besar manfaat yang tersambung ke orang lain.
-            </p>
-            <a href="{{ route('supplier.items.create') }}"
-               class="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-[#166534] text-white text-xs font-bold hover:bg-[#14532d] transition">
-                Tambah Barang
-                <x-icon name="arrow-right" :size="13" />
-            </a>
-        </div>
-    </div>
 
     <div class="bg-white border border-[#E3EAE3] rounded-2xl p-5">
         <h3 class="font-extrabold tracking-tight text-sm mb-3">Kategori Populer</h3>

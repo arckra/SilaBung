@@ -13,7 +13,7 @@
     <h1 class="text-2xl font-extrabold tracking-tight">Cek Email Kamu</h1>
     <p class="text-[#647164] text-sm mt-2">
         Kami telah mengirim 6 digit kode verifikasi ke <br>
-        <b class="text-[#172117]">{{ auth()->user()->email }}</b>
+        <b class="text-[#172117]">{{ session('pending_user.email') }}</b>
     </p>
 </div>
 
@@ -56,10 +56,9 @@
     </form>
 </div>
 
-<form method="POST" action="{{ route('logout') }}" class="mt-8 text-center">
-    @csrf
-    <button type="submit" class="text-xs text-[#647164] hover:text-red-600 transition">Salah masuk email? Logout</button>
-</form>
+<div class="mt-8 text-center">
+    <a href="{{ route('register') }}" class="text-xs text-[#647164] hover:text-[#166534] transition underline">Batal & Kembali ke Daftar</a>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {

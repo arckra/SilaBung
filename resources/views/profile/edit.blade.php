@@ -362,21 +362,6 @@
                     <path d="M9 18l6-6-6-6"/>
                 </svg>
             </a>
-
-            <a href="mailto:halo@silabung.id"
-               class="flex items-center gap-3.5 px-4 py-4 hover:bg-[#F8FAF8] transition">
-                <div class="w-9 h-9 rounded-full bg-[#DCFCE7] text-[#166534] grid place-items-center shrink-0">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
-                </div>
-                <div class="flex-1 font-bold text-sm">Pusat Bantuan</div>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#647164" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 18l6-6-6-6"/>
-                </svg>
-            </a>
         </div>
     </div>
 

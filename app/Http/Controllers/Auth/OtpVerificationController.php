@@ -3,62 +3,83 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Mail\VerificationCodeMail;
-use Illuminate\Support\Str;
 
 class OtpVerificationController extends Controller
 {
     public function show()
     {
-        if (auth()->user()->email_verified_at) {
-            return redirect()->route('dashboard');
+        // Jika tidak ada data pending di session, kembalikan ke halaman register
+        if (!Session::has('pending_user')) {
+            return redirect()->route('register')->withErrors(['email' => 'Sesi habis, silakan daftar ulang.']);
         }
+
         return view('auth.verify-otp');
     }
 
     public function verify(Request $request)
     {
-        // Validasi: Wajib diisi, berupa teks, dan panjangnya tepat 6 karakter
         $request->validate([
             'otp' => ['required', 'string', 'size:6']
-        ], [
-            'otp.required' => 'Kode verifikasi wajib diisi.',
-            'otp.size'     => 'Kode verifikasi harus 6 digit.'
         ]);
 
-        $otpString = $request->otp;
-        $user = auth()->user();
+        $pendingUser = Session::get('pending_user');
 
-        // Cek apakah cocok dengan database
-        if ($user->email_otp !== $otpString) {
+        if (!$pendingUser) {
+            return redirect()->route('register')->withErrors(['email' => 'Sesi habis, silakan daftar ulang.']);
+        }
+
+        // Cek OTP
+        if ($pendingUser['otp'] != $request->otp) {
             return back()->withErrors(['otp' => 'Kode verifikasi salah. Silakan cek email kamu lagi.']);
         }
 
-        if (now()->greaterThan($user->email_otp_expires_at)) {
+        // Cek Kedaluwarsa
+        if (now()->greaterThan($pendingUser['expires_at'])) {
             return back()->withErrors(['otp' => 'Kode sudah kedaluwarsa. Silakan kirim ulang kode.']);
         }
 
-        // Tandai email terverifikasi
-        $user->email_verified_at = now();
-        $user->email_otp = null;
-        $user->email_otp_expires_at = null;
-        $user->save();
+        // ==========================================
+        // JIKA LOLOS, BARU MASUKKAN KE DATABASE
+        // ==========================================
+        $user = User::create([
+            'name'              => $pendingUser['name'],
+            'email'             => $pendingUser['email'],
+            'password'          => $pendingUser['password'],
+            'email_verified_at' => now(), // Langsung tandai terverifikasi
+        ]);
 
-        return redirect()->route('dashboard')->with('success', 'Email berhasil diverifikasi!');
+        // Hapus session karena sudah tidak dibutuhkan
+        Session::forget('pending_user');
+
+        // Login user
+        Auth::login($user);
+
+        // Arahkan ke pemilihan role
+        return redirect()->route('onboarding.role')->with('success', 'Email berhasil diverifikasi! Silakan pilih peran.');
     }
 
     public function resend()
     {
-        $user = auth()->user();
+        $pendingUser = Session::get('pending_user');
+
+        if (!$pendingUser) {
+            return redirect()->route('register');
+        }
+
         $otp = rand(100000, 999999);
+        
+        // Update OTP di session
+        $pendingUser['otp'] = $otp;
+        $pendingUser['expires_at'] = now()->addMinutes(15);
+        Session::put('pending_user', $pendingUser);
 
-        $user->email_otp = $otp;
-        $user->email_otp_expires_at = now()->addMinutes(15);
-        $user->save();
-
-        Mail::to($user->email)->send(new VerificationCodeMail($otp));
+        Mail::to($pendingUser['email'])->send(new VerificationCodeMail($otp));
 
         return back()->with('success', 'Kode verifikasi baru telah dikirim ke email kamu.');
     }

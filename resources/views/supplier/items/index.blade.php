@@ -5,11 +5,7 @@
 @section('page-subtitle', 'Kelola stok barang yang kamu bagikan')
 
 @section('page-actions')
-    <a href="{{ route('supplier.items.create') }}"
-       class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#16A34A] text-white text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#166534] transition">
-        <x-icon name="plus" :size="15" />
-        Tambah Barang
-    </a>
+
 @endsection
 
 @section('content')

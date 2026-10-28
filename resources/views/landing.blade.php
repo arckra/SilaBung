@@ -122,20 +122,19 @@
             <a href="#tentang"    class="land-nav-link px-3.5 py-2 rounded-lg text-sm font-semibold text-[#647164] transition">Tentang</a>
         </div>
 
-        {{-- Actions --}}
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-2">
             @auth
                 <a href="{{ route('dashboard') }}"
-                   class="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-[#16A34A] text-white text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#166534] transition">
-                    Buka Dashboard
+                   class="inline-flex items-center gap-1.5 h-9 sm:h-10 px-3 sm:px-4 rounded-xl bg-[#16A34A] text-white text-xs sm:text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#166534] transition whitespace-nowrap">
+                    Dashboard
                 </a>
             @else
                 <a href="{{ route('login') }}"
-                   class="hidden sm:inline-flex h-10 px-4 rounded-xl text-sm font-bold text-[#172117] hover:bg-[#F0FDF4] hover:text-[#166534] transition items-center">
+                   class="inline-flex items-center h-9 sm:h-10 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold text-[#172117] hover:bg-[#F0FDF4] hover:text-[#166534] transition whitespace-nowrap">
                     Masuk
                 </a>
                 <a href="{{ route('register') }}"
-                   class="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-[#16A34A] text-white text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#166534] transition">
+                   class="inline-flex items-center gap-1.5 h-9 sm:h-10 px-3 sm:px-4 rounded-xl bg-[#16A34A] text-white text-xs sm:text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#166534] transition whitespace-nowrap">
                     Daftar Gratis
                 </a>
             @endauth
@@ -170,7 +169,7 @@
             </p>
 
             <div class="mt-8 flex flex-wrap gap-3">
-                <a href="{{ route('register') }}"
+                <a href="{{ route('login') }}"
                    class="inline-flex items-center gap-2 h-12 px-6 rounded-xl bg-[#16A34A] text-white font-bold text-sm shadow-lg shadow-green-600/25 hover:bg-[#166534] hover:-translate-y-0.5 transition">
                     Mulai Sekarang
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
