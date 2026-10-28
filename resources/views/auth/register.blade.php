@@ -129,8 +129,9 @@
         <input type="checkbox" required
                class="w-4 h-4 mt-0.5 rounded border-[#E3EAE3] text-[#16A34A] focus:ring-[#16A34A]/30">
         <span class="text-[13px] text-[#647164] leading-relaxed">
-            Saya setuju untuk menggunakan SILABUNG secara bertanggung jawab
-            dan hanya membagikan barang yang layak digunakan.
+            Saya setuju dengan 
+            <a href="{{ route('tos') }}" target="_blank" class="font-bold text-[#166534] hover:underline">Syarat & Ketentuan</a> 
+            serta berkomitmen untuk hanya membagikan barang yang layak digunakan.
         </span>
     </label>
 

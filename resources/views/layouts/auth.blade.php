@@ -99,11 +99,17 @@
             </div>
         </a>
 
+        <div class="flex items-center gap-4 text-xs text-[#647164]">
+            <span>© {{ date('Y') }} SILABUNG</span>
+            <a href="{{ route('tos') }}" class="hover:text-[#166534] transition">Syarat & Ketentuan</a>
+            <a href="{{ route('tentang') }}" class="hover:text-[#166534] transition">Tentang Kami</a>
+        </div>
         <div class="w-full max-w-[420px] mx-auto fade-in">
             @yield('content')
         </div>
     </div>
 </div>
+
 
 </body>
 </html>

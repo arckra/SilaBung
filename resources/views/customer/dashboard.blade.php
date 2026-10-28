@@ -39,11 +39,6 @@
         <p class="text-sm sm:text-base text-[#647164] leading-relaxed mb-5">
             Selamat datang kembali di SILABUNG. Yuk temukan barang yang masih bisa digunakan dan berikan manfaat baru!
         </p>
-        <a href="{{ route('customer.search') }}"
-           class="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-[#166534] text-white text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#14532d] transition">
-            <x-icon name="plus" :size="15" />
-            Jelajahi Barang
-        </a>
     </div>
 </div>
 
@@ -190,32 +185,6 @@
 
 {{-- ===================== CTA + KATEGORI POPULER ===================== --}}
 <div class="grid md:grid-cols-[1.4fr_1fr] gap-4">
-
-    {{-- CTA --}}
-    <div class="bg-gradient-to-br from-[#DCFCE7] via-[#F0FDF4] to-white border border-[#cfe6d5] rounded-2xl p-6 relative overflow-hidden">
-        <div class="absolute -right-10 -bottom-16 w-44 h-44 opacity-40 pointer-events-none">
-            <svg viewBox="0 0 200 200" class="w-full h-full">
-                <path d="M100 20 C130 50 130 150 100 180 C70 150 70 50 100 20 Z" fill="#16A34A" opacity="0.15"/>
-                <circle cx="100" cy="100" r="60" fill="none" stroke="#16A34A" stroke-width="2" opacity="0.3" stroke-dasharray="6 6"/>
-            </svg>
-        </div>
-        <div class="relative max-w-xs">
-            <div class="w-10 h-10 rounded-xl bg-white grid place-items-center text-[#166534] mb-4">
-                <x-icon name="leaf" :size="18" />
-            </div>
-            <h3 class="text-lg font-extrabold tracking-tight leading-tight mb-2">
-                Mari jaga lingkungan bersama-sama
-            </h3>
-            <p class="text-xs text-[#647164] leading-relaxed mb-4">
-                Setiap barang yang kamu gunakan kembali adalah langkah kecil untuk bumi yang lebih baik.
-            </p>
-            <a href="{{ route('customer.search') }}"
-               class="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-[#166534] text-white text-xs font-bold hover:bg-[#14532d] transition">
-                Pelajari lebih lanjut
-                <x-icon name="arrow-right" :size="13" />
-            </a>
-        </div>
-    </div>
 
     {{-- Kategori populer --}}
     <div class="bg-white border border-[#E3EAE3] rounded-2xl p-5">

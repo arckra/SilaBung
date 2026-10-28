@@ -532,12 +532,10 @@
             </div>
         </div>
 
-        <div class="mt-12 pt-6 border-t border-[#E3EAE3] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#647164]">
-            <div>© {{ date('Y') }} SILABUNG — Sirkula Sambung.</div>
-            <div class="flex items-center gap-3">
-                <a href="#" class="hover:text-[#166534]">Kebijakan Privasi</a>
-                <span class="text-[#E3EAE3]">|</span>
-                <a href="#" class="hover:text-[#166534]">Syarat & Ketentuan</a>
+        <div class="flex items-center gap-4 text-xs text-[#647164]">
+            <span>© {{ date('Y') }} SILABUNG</span>
+            <a href="{{ route('tos') }}" class="hover:text-[#166534] transition">Syarat & Ketentuan</a>
+            <a href="{{ route('tentang') }}" class="hover:text-[#166534] transition">Tentang Kami</a>
         </div>
     </div>
 </footer>

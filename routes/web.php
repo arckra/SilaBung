@@ -20,6 +20,7 @@ Route::get('/', function () {
     return view('landing');
 })->name('home');
 
+Route::view('/syarat-ketentuan', 'tos')->name('tos');
 Route::view('/tentang', 'tentang')->name('tentang');
 
 /* Onboarding */

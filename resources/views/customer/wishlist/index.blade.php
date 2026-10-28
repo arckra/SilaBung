@@ -5,31 +5,10 @@
 @section('page-subtitle', 'Daftar kebutuhan yang sudah kamu cari')
 
 @section('page-actions')
-    <a href="{{ route('customer.search') }}"
-       class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#16A34A] text-white text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#166534] transition">
-        <x-icon name="search" :size="15" />
-    </a>
+
 @endsection
 
 @section('content')
-
-<div class="sticky top-[68px] z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 mb-4
-            bg-[#F8FAF8]/95 backdrop-blur-md border-b border-[#E3EAE3]">
-    <div class="flex items-center gap-3">
-        <a href="{{ route('customer.wishlist.create') }}"
-           class="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-[#16A34A] text-white text-sm font-bold
-                  shadow-md shadow-green-600/20 hover:bg-[#166534] transition">
-            <x-icon name="plus" :size="16" />
-            Buat Wishlist
-        </a>
-
-        @if ($wishlists->total() > 0)
-            <span class="text-xs text-[#647164] font-semibold">
-                {{ $wishlists->total() }} wishlist
-            </span>
-        @endif
-    </div>
-</div>
 
 
 @if ($wishlists->isEmpty())
