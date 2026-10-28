@@ -31,7 +31,7 @@
 
 <form method="POST" action="{{ route('verification.otp.verify') }}" id="otpForm">
     @csrf
-    {{-- Input tersembunyi untuk menyimpan hasil ketikan --}}
+    {{-- Input Tersembunyi: Ini yang akan dikirim ke Controller --}}
     <input type="hidden" name="otp" id="otpValue">
 
     {{-- 6 Kotak Input Visual --}}
@@ -56,7 +56,6 @@
     </form>
 </div>
 
-{{-- Logout jika salah email --}}
 <form method="POST" action="{{ route('logout') }}" class="mt-8 text-center">
     @csrf
     <button type="submit" class="text-xs text-[#647164] hover:text-red-600 transition">Salah masuk email? Logout</button>
@@ -67,43 +66,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputs = document.querySelectorAll('.otp-input');
     const hiddenInput = document.getElementById('otpValue');
     const submitBtn = document.getElementById('submitBtn');
-    const form = document.getElementById('otpForm');
 
-    // Fokuskan otomatis ke kotak pertama saat halaman dimuat
-    if (inputs.length > 0) {
-        inputs[0].focus();
-    }
+    if (inputs.length > 0) inputs[0].focus();
 
     inputs.forEach((input, index) => {
-        // 1. Saat user mengetik
         input.addEventListener('input', (e) => {
-            // Paksa hanya menerima angka
             e.target.value = e.target.value.replace(/[^0-9]/g, '');
-
-            // Jika sudah ketik 1 angka, pindah ke kotak berikutnya
+            
             if (e.target.value.length === 1 && index < inputs.length - 1) {
                 inputs[index + 1].focus();
             }
-            
             checkComplete();
         });
 
-        // 2. Saat user menekan Backspace
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                // Pindah ke kotak sebelumnya jika kotak ini kosong
                 inputs[index - 1].focus();
-                inputs[index - 1].value = ''; // Hapus isi kotak sebelumnya
+                inputs[index - 1].value = '';
                 checkComplete();
-            }
-            
-            // Jika user tekan Enter dan kode sudah lengkap, submit form
-            if (e.key === 'Enter' && !submitBtn.disabled) {
-                form.submit();
             }
         });
 
-        // 3. Handle Paste (misal user copy-paste kode dari email)
         input.addEventListener('paste', (e) => {
             e.preventDefault();
             const pastedData = (e.clipboardData || window.clipboardData).getData('text');
@@ -111,28 +94,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (numbers.length > 0) {
                 inputs.forEach((inp, i) => {
-                    if (numbers[i]) {
-                        inp.value = numbers[i];
-                    }
+                    if (numbers[i]) inp.value = numbers[i];
                 });
-                
-                // Fokus ke kotak terakhir yang terisi
-                const lastFilledIndex = Math.min(numbers.length - 1, inputs.length - 1);
-                inputs[lastFilledIndex].focus();
+                const lastFilled = Math.min(numbers.length - 1, inputs.length - 1);
+                inputs[lastFilled].focus();
                 checkComplete();
             }
         });
     });
 
-    // 4. Fungsi untuk mengecek apakah 6 kotak sudah terisi penuh
     function checkComplete() {
         let val = '';
         inputs.forEach(inp => val += inp.value);
         
-        // Simpan nilai ke input hidden
+        // KUNCI UTAMA: Masukkan nilai gabungan ke input hidden
         hiddenInput.value = val;
 
-        // Aktifkan tombol jika sudah 6 angka
+        // Hanya aktifkan tombol jika panjangnya pas 6
         if (val.length === 6) {
             submitBtn.disabled = false;
             submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');

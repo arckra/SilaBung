@@ -38,27 +38,30 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Generate OTP 6 karakter (Huruf & Angka)
+        // Generate OTP 6 digit
         $otp = rand(100000, 999999);
 
+        // 1. Buat user TANPA OTP dulu
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'email_otp' => $otp,
-            'email_otp_expires_at' => now()->addMinutes(15),
         ]);
 
-        // Kirim Email
+        // 2. Paksa simpan OTP ke database
+        $user->email_otp = $otp;
+        $user->email_otp_expires_at = now()->addMinutes(15);
+        $user->save();
+
+        // 3. Kirim Email
         try {
             Mail::to($user->email)->send(new \App\Mail\VerificationCodeMail($otp));
         } catch (\Exception $e) {
-            // Jika gagal kirim email (misal internet mati), tetap lanjut tapi beri warning
+            // Abaikan jika gagal kirim
         }
 
         Auth::login($user);
 
-        // JANGAN ke dashboard dulu, tapi ke halaman verifikasi OTP
         return redirect()->route('verification.otp');
     }
 }

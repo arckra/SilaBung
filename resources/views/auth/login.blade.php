@@ -124,30 +124,6 @@
     </a>
 </p>
 
-{{-- Demo box --}}
-<div class="mt-7 p-4 rounded-xl bg-[#F0FDF4] border border-dashed border-green-300">
-    <div class="text-[10px] font-extrabold tracking-widest text-[#166534] uppercase mb-2.5">
-        Akun Demo
-    </div>
-    <div class="space-y-2 text-xs">
-        <div class="flex items-center justify-between gap-3">
-            <span class="text-[#647164]">Supplier</span>
-            <code class="bg-white px-2 py-1 rounded-md border border-[#E3EAE3] text-[11px] font-mono cursor-pointer hover:border-[#16A34A] transition"
-                  onclick="fillDemo('budi@silabung.test','password', this)">
-                budi@silabung.test / password
-            </code>
-        </div>
-        <div class="flex items-center justify-between gap-3">
-            <span class="text-[#647164]">Customer</span>
-            <code class="bg-white px-2 py-1 rounded-md border border-[#E3EAE3] text-[11px] font-mono cursor-pointer hover:border-[#16A34A] transition"
-                  onclick="fillDemo('ari@silabung.test','password', this)">
-                ari@silabung.test / password
-            </code>
-        </div>
-    </div>
-    <p class="text-[10px] text-[#647164] mt-2.5 italic">Klik salah satu untuk mengisi otomatis.</p>
-</div>
-
 <script>
     function togglePw(id, btn) {
         const inp = document.getElementById(id);

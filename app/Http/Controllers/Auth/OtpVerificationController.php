@@ -20,13 +20,19 @@ class OtpVerificationController extends Controller
 
     public function verify(Request $request)
     {
+        // Validasi: Wajib diisi, berupa teks, dan panjangnya tepat 6 karakter
         $request->validate([
             'otp' => ['required', 'string', 'size:6']
+        ], [
+            'otp.required' => 'Kode verifikasi wajib diisi.',
+            'otp.size'     => 'Kode verifikasi harus 6 digit.'
         ]);
 
+        $otpString = $request->otp;
         $user = auth()->user();
 
-        if ($user->email_otp !== $request->otp) {
+        // Cek apakah cocok dengan database
+        if ($user->email_otp !== $otpString) {
             return back()->withErrors(['otp' => 'Kode verifikasi salah. Silakan cek email kamu lagi.']);
         }
 

@@ -228,38 +228,6 @@
     </div>
 </section>
 
-{{-- ============ STATUS PROJECT ============ --}}
-<section class="max-w-3xl mx-auto px-5 py-10 border-t border-[#E3EAE3]">
-    <h2 class="text-xl font-extrabold tracking-tight mb-5">Status project</h2>
-
-    <div class="bg-[#F0FDF4] border border-[#cfe6d5] rounded-2xl p-5 sm:p-6">
-        <p class="text-[15px] text-[#172117] leading-relaxed mb-4">
-            SILABUNG masih dalam tahap pengembangan. Beberapa hal sudah jalan penuh (pencarian barang, pengajuan,
-            pengelolaan stok, peta lokasi, chat), beberapa masih sederhana dan akan terus diperbaiki.
-        </p>
-        <div class="grid sm:grid-cols-2 gap-4 text-sm">
-            <div>
-                <div class="font-bold text-[#166534] mb-2">Sudah jalan</div>
-                <ul class="space-y-1 text-[#647164]">
-                    <li>· Cari barang berdasarkan kategori &amp; jarak</li>
-                    <li>· Ajukan &amp; kelola permintaan</li>
-                    <li>· Peta lokasi supplier</li>
-                    <li>· Chat antara customer &amp; supplier</li>
-                    <li>· Mode terang &amp; gelap</li>
-                </ul>
-            </div>
-            <div>
-                <div class="font-bold text-[#166534] mb-2">Masih dikembangkan</div>
-                <ul class="space-y-1 text-[#647164]">
-                    <li>· Notifikasi real-time</li>
-                    <li>· Verifikasi supplier</li>
-                    <li>· Estimasi dampak karbon</li>
-                    <li>· Mode gelap untuk landing page</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
 
 {{-- ============ TIM ============ --}}
 <section class="max-w-3xl mx-auto px-5 py-10 border-t border-[#E3EAE3]">

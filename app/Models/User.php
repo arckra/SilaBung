@@ -13,6 +13,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'email_otp',              // <-- Pastikan ada
         'email_otp_expires_at',
         'phone',
         'supplier_document_path', 
