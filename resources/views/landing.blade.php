@@ -475,17 +475,6 @@
             <p class="mt-4 text-[#647164] text-base leading-relaxed">
                 Bagikan sekarang. Mungkin ada mahasiswa, pengrajin, atau komunitas yang sedang membutuhkannya.
             </p>
-
-            <div class="mt-8 flex flex-wrap gap-3 justify-center">
-                <a href="{{ route('register') }}"
-                   class="inline-flex items-center gap-2 h-12 px-7 rounded-xl bg-[#16A34A] text-white font-bold text-sm shadow-lg shadow-green-600/25 hover:bg-[#166534] hover:-translate-y-0.5 transition">
-                    Daftar & Bagikan Barang
-                </a>
-                <a href="{{ route('login') }}"
-                   class="inline-flex items-center gap-2 h-12 px-7 rounded-xl bg-white border border-[#E3EAE3] text-[#172117] font-bold text-sm hover:border-[#16A34A] hover:text-[#166534] transition">
-                    Sudah punya akun? Masuk
-                </a>
-            </div>
         </div>
     </div>
 </section>

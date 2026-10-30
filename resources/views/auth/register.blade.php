@@ -143,11 +143,6 @@
             <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
     </button>
-
-    <p class="text-[11px] text-center text-[#647164]">
-        Setelah mendaftar, kamu akan memilih peran <b class="text-[#166534]">Customer</b> atau
-        <b class="text-[#166534]">Supplier</b> — dan peran itu tidak bisa diubah.
-    </p>
 </form>
 
 {{-- Divider --}}

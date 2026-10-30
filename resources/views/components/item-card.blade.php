@@ -22,16 +22,15 @@
 <div class="group bg-white border border-[#E3EAE3] rounded-2xl overflow-hidden flex flex-col transition hover:shadow-lg hover:border-green-300 hover:-translate-y-0.5 relative">
 
     {{-- Thumbnail --}}
-    <div class="h-36 grid place-items-center border-b border-[#E3EAE3] relative"
-         style="background-color: {{ $bg }};">
-        <a href="{{ route('customer.items.show', $item) }}" class="absolute inset-0 grid place-items-center">
+    <div class="h-36 grid place-items-center border-b border-[#E3EAE3] relative" style="background-color: {{ $bg }};">
+        <div class="h-36 grid place-items-center border-b border-[#E3EAE3] relative p-3" style="background-color: {{ $bg }};">
             @if ($item->image_path)
-                <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}"
-                     class="absolute inset-0 w-full h-full object-cover">
+                {{-- Gambar utuh di dalam kotak, tanpa onclick zoom --}}
+                <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="w-full h-full object-contain drop-shadow-sm">
             @else
                 <span class="text-5xl">{{ $emoji }}</span>
             @endif
-        </a>
+        </div>
 
         {{-- Jarak --}}
         @if ($distText)

@@ -1,9 +1,22 @@
 @extends('layouts.app')
 
 @section('title', 'Barang Saya')
+@push('head')
+<style>
+    /* Sembunyikan tampilan mobile di layar laptop/desktop */
+    .mobile-view { display: block; }
+    .desktop-view { display: none; }
+
+    /* Tampilkan tabel di layar laptop/desktop, sembunyikan card mobile */
+    @media (min-width: 768px) {
+        .mobile-view { display: none !important; }
+        .desktop-view { display: block !important; }
+    }
+</style>
+@endpush
+
 @section('page-title', 'Barang Saya')
 @section('page-subtitle', 'Kelola stok barang yang kamu bagikan')
-
 @section('page-actions')
 
 @endsection
@@ -12,15 +25,70 @@
 
 @if ($items->isEmpty())
     <div class="bg-white border border-[#E3EAE3] rounded-2xl">
-        <x-empty-state
-            icon="package"
-            title="Belum ada barang yang kamu bagikan"
+        <x-empty-state icon="package" title="Belum ada barang yang kamu bagikan"
             description="Yuk bagikan barang yang sudah tidak kamu gunakan."
-            actionLabel="Tambah Barang Pertamamu"
-            :actionHref="route('supplier.items.create')" />
+            actionLabel="Tambah Barang Pertamamu" :actionHref="route('supplier.items.create')" />
     </div>
 @else
-    <div class="bg-white border border-[#E3EAE3] rounded-2xl overflow-hidden">
+
+    <div class="mobile-view space-y-3">
+        @foreach ($items as $item)
+            <div class="bg-white border border-[#E3EAE3] rounded-2xl p-4 flex gap-4">
+                {{-- Gambar Barang --}}
+                <div class="w-16 h-16 rounded-xl bg-[#DCFCE7] flex items-center justify-center shrink-0 overflow-hidden p-1 border border-[#E3EAE3]">
+                    @if ($item->image_path)
+                        <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="w-full h-full object-contain">
+                    @else
+                        <span class="text-2xl">{{ $item->category->emoji ?? '📦' }}</span>
+                    @endif
+                </div>
+
+                {{-- Info Barang --}}
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-sm truncate">{{ $item->name }}</h3>
+                    <div class="text-[11px] text-[#647164] mt-0.5">{{ $item->category->name }}</div>
+                    
+                    <div class="flex flex-wrap gap-1.5 mt-2">
+                        <span class="px-2 py-0.5 rounded-md bg-[#F1F5F1] text-[#647164] text-[10px] font-bold">
+                            {{ $item->quantity }} {{ $item->unit }}
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold
+                            {{ $item->condition === 'Baik' ? 'bg-[#DCFCE7] text-[#166534]' : ($item->condition === 'Cukup' ? 'bg-amber-100 text-amber-700' : 'bg-red-50 text-red-700') }}">
+                            {{ $item->condition }}
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold
+                            {{ $item->status === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' }}">
+                            {{ $item->status === 'available' ? 'Tersedia' : 'Habis' }}
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Tombol Aksi --}}
+                <div class="flex flex-col gap-2 shrink-0 justify-center">
+                    <a href="{{ route('supplier.items.edit', $item) }}" class="w-10 h-10 rounded-xl bg-[#DCFCE7] text-[#166534] flex items-center justify-center hover:bg-[#bbf7d0] transition">
+                        <x-icon name="edit" :size="18" />
+                    </a>
+                    <form method="POST" action="{{ route('supplier.items.destroy', $item) }}" onsubmit="return confirm('Hapus barang ini?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition">
+                            <x-icon name="trash" :size="18" />
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @endforeach
+        
+        {{-- Pagination Mobile --}}
+        <div class="mt-4">
+            {{ $items->links() }}
+        </div>
+    </div>
+
+
+    {{-- ========================================== --}}
+    {{-- TAMPILAN DESKTOP (Tabel Normal)           --}}
+    {{-- ========================================== --}}
+    <div class="desktop-view bg-white border border-[#E3EAE3] rounded-2xl overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="bg-[#FBFDFB] border-b border-[#E3EAE3]">
@@ -38,8 +106,12 @@
                         <tr class="hover:bg-[#FBFDFB] transition">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-[#DCFCE7] grid place-items-center text-lg">
-                                        {{ $item->category->emoji ?? '📦' }}
+                                    <div class="w-10 h-10 rounded-xl bg-[#DCFCE7] grid place-items-center text-lg overflow-hidden shrink-0 border border-[#E3EAE3]">
+                                        @if ($item->image_path)
+                                            <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="w-full h-full object-contain p-0.5">
+                                        @else
+                                            {{ $item->category->emoji ?? '📦' }}
+                                        @endif
                                     </div>
                                     <div class="min-w-0">
                                         <div class="font-bold truncate max-w-[220px]">{{ $item->name }}</div>
@@ -64,17 +136,16 @@
                                 </span>
                             </td>
                             <td class="px-5 py-3.5">
-                                <div class="flex justify-end gap-1">
+                                <div class="flex justify-end gap-2">
                                     <a href="{{ route('supplier.items.edit', $item) }}"
-                                       class="w-8 h-8 rounded-lg grid place-items-center text-[#647164] hover:bg-[#DCFCE7] hover:text-[#166534] transition"
-                                       title="Edit">
-                                        <x-icon name="edit" :size="14" />
+                                       class="w-10 h-10 rounded-xl grid place-items-center text-[#647164] hover:bg-[#DCFCE7] hover:text-[#166534] transition" title="Edit">
+                                        <x-icon name="edit" :size="18" />
                                     </a>
                                     <form method="POST" action="{{ route('supplier.items.destroy', $item) }}"
                                           onsubmit="return confirm('Yakin hapus barang ini?')">
                                         @csrf @method('DELETE')
-                                        <button class="w-8 h-8 rounded-lg grid place-items-center text-[#647164] hover:bg-red-50 hover:text-red-600 transition" title="Hapus">
-                                            <x-icon name="trash" :size="14" />
+                                        <button class="w-10 h-10 rounded-xl grid place-items-center text-[#647164] hover:bg-red-50 hover:text-red-600 transition" title="Hapus">
+                                            <x-icon name="trash" :size="18" />
                                         </button>
                                     </form>
                                 </div>
@@ -89,6 +160,7 @@
             <div class="px-5 py-4 border-t border-[#E3EAE3]">{{ $items->links() }}</div>
         @endif
     </div>
+
 @endif
 
 @endsection

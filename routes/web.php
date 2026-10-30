@@ -10,6 +10,7 @@ use App\Http\Controllers\Customer\FavoriteController as CustomerFavorite;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 /* Public */
 Route::get('/', function () {
@@ -63,6 +64,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])
         Route::post('/wishlist/{wishlist}/confirm',    [\App\Http\Controllers\Customer\DemandListController::class, 'confirm'])->name('wishlist.confirm');
         Route::post('/allocations/{allocation}/toggle',[\App\Http\Controllers\Customer\DemandListController::class, 'toggleAllocation'])->name('wishlist.toggle');
         Route::patch('/requests/{request}/complete', [\App\Http\Controllers\Customer\RequestController::class, 'complete'])->name('requests.complete');
+        Route::delete('/wishlist/{wishlist}', [\App\Http\Controllers\Customer\DemandListController::class, 'destroy'])->name('wishlist.destroy');
     });
 
 /* ============ SUPPLIER ============ */
@@ -87,5 +89,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
 });
 
+Route::get('/uploads/{path}', function ($path) {
+    $filePath = public_path('uploads/' . $path);
+    
+    if (!File::exists($filePath)) {
+        abort(404);
+    }
+    
+    return response()->file($filePath);
+})->where('path', '.*');
 
 require __DIR__.'/auth.php';

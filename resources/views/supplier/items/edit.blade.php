@@ -131,7 +131,7 @@
 
                     @if ($item->image_path)
                         <div class="mb-3 p-3 bg-[#F8FAF8] rounded-xl border border-[#E3EAE3] flex items-center gap-3">
-                            <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}"
+                            <img src="{{ $item->image_url }}" alt="{{ $item->name }}"
                                  class="w-20 h-20 rounded-lg object-cover border border-[#E3EAE3]">
                             <div class="text-xs text-[#647164]">
                                 Foto saat ini<br>
@@ -205,8 +205,9 @@
 
         {{-- ============ ACTIONS ============ --}}
         <div class="flex flex-wrap items-center justify-between gap-2.5">
-            {{-- Hapus di kiri --}}
-            <button type="button" onclick="confirmDelete()"
+            {{-- Hapus di kiri (Gunakan atribut form="deleteForm" bawaan HTML5) --}}
+            <button type="submit" form="deleteForm" 
+                    onclick="return confirm('Yakin hapus barang ini? Tindakan ini tidak bisa dibatalkan.');"
                     class="inline-flex items-center gap-1.5 h-11 px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm font-bold hover:bg-red-100 transition">
                 <x-icon name="trash" :size="15" />
                 Hapus Barang
@@ -297,18 +298,12 @@
                         geoBtn.disabled = false;
                         geoBtn.innerHTML = 'Gagal — geser pin manual';
                         setTimeout(() => {
-                            geoBtn.innerHTML = '<x-icon name="navigation" :size="13" /> Pakai lokasi saya';
+                            geoBtn.innerHTML = 'Pakai lokasi saya';
                         }, 2500);
                     },
                     { timeout: 8000 }
                 );
             });
         });
-
-        function confirmDelete() {
-            if (confirm('Yakin hapus barang ini? Tindakan ini tidak bisa dibatalkan.')) {
-                document.getElementById('deleteForm').submit();
-            }
-        }
     </script>
 @endpush

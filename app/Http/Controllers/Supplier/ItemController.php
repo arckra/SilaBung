@@ -42,7 +42,16 @@ class ItemController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('items', 'public');
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $folderPath = public_path('uploads/items');
+            
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0755, true);
+            }
+            
+            $file->move($folderPath, $filename);
+            $data['image_path'] = 'items/' . $filename;
         }
         unset($data['image']);
 
@@ -89,13 +98,22 @@ class ItemController extends Controller
             'longitude'   => ['nullable', 'numeric', 'between:-180,180'],
         ]);
     
-        // Handle upload foto baru
         if ($request->hasFile('image')) {
-            // Hapus foto lama kalau ada
-            if ($item->image_path && \Storage::disk('public')->exists($item->image_path)) {
-                \Storage::disk('public')->delete($item->image_path);
+            // Hapus foto lama jika ada
+            if ($item->image_path && file_exists(public_path('uploads/' . $item->image_path))) {
+                unlink(public_path('uploads/' . $item->image_path));
             }
-            $data['image_path'] = $request->file('image')->store('items', 'public');
+
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $folderPath = public_path('uploads/items');
+            
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0755, true);
+            }
+            
+            $file->move($folderPath, $filename);
+            $data['image_path'] = 'items/' . $filename;
         }
         unset($data['image']);
     

@@ -21,16 +21,20 @@
 
         {{-- Foto --}}
         <div class="bg-white border border-[#E3EAE3] rounded-2xl overflow-hidden">
-            <div class="h-72 grid place-items-center"
+            {{-- Kotak dengan tinggi tetap (h-72) dan gambar tidak terpotong (object-contain) --}}
+            <div class="w-full h-72 flex items-center justify-center p-6"
                  style="background-color: {{ ['kardus'=>'#FEF3C7','plastik'=>'#CFFAFE','botol'=>'#DBEAFE','kertas'=>'#F1F5F9','kaca'=>'#CCFBF1','kayu'=>'#FDE68A','logam'=>'#E2E8F0','elektronik'=>'#EDE9FE','pakaian'=>'#FCE7F3'][$item->category->slug] ?? '#DCFCE7' }};">
+                
                 @if ($item->image_path)
-                    <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
+                    {{-- Hapus onclick, ganti ke object-contain --}}
+                    <img src="{{ $item->image_url }}" 
+                         alt="{{ $item->name }}" 
+                         class="w-full h-full object-contain drop-shadow-sm">
                 @else
                     <span class="text-8xl">{{ $item->category->emoji ?? '📦' }}</span>
                 @endif
             </div>
         </div>
-
         {{-- Info utama --}}
         <div class="bg-white border border-[#E3EAE3] rounded-2xl p-6">
             <div class="flex flex-wrap gap-2 mb-3">
@@ -67,7 +71,7 @@
                 </form>
             </div>
 
-            <p class="text-sm text-[#647164] leading-relaxed">
+            <p class="hidden sm:block text-sm text-[#647164] leading-relaxed">
                 {{ $item->description ?: 'Tidak ada deskripsi.' }}
             </p>
 

@@ -78,7 +78,7 @@ class User extends Authenticatable
         if (! $this->avatar_path) {
             return null;
         }
-        return \Storage::disk('public')->url($this->avatar_path);
+        return asset('uploads/' . $this->avatar_path);
     }
 
     public function getInitialsAttribute(): string

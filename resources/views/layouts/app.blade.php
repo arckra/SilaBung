@@ -331,6 +331,19 @@ html.dark .theme-preview-light > div {
 
     $mobileNav = array_slice($nav, 0, 4);
 
+    $pendingRequestCount = 0;
+    if ($user && $user->isSupplier()) {
+        $pendingRequestCount = \App\Models\ItemRequest::whereHas('item', function ($q) use ($user) {
+            $q->where('supplier_id', $user->id);
+        })->where('status', 'pending')->count();
+    }
+    
+    $acceptedRequestCount = 0;
+    if ($user && $user->isCustomer()) {
+        $acceptedRequestCount = \App\Models\ItemRequest::where('customer_id', $user->id)
+            ->where('status', 'accepted')
+            ->count();
+    }
 @endphp
 
 <div class="flex min-h-screen">
@@ -349,14 +362,35 @@ html.dark .theme-preview-light > div {
 
         <nav class="flex flex-col gap-1 flex-1 overflow-y-auto">
             @foreach ($nav as $item)
-                @php $active = request()->routeIs($item['route']); @endphp
+                @php 
+                    $active = request()->routeIs($item['route']); 
+                    $isIncomingRequest = $item['route'] === 'supplier.requests.index';
+                    $isMyRequest = $item['route'] === 'customer.requests.index'; 
+                @endphp
+                
                 <a href="{{ route($item['route']) }}"
                    data-label="{{ $item['label'] }}"
                    class="side-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition
                           {{ $active
                               ? 'bg-[#DCFCE7] text-[#166534] font-bold'
                               : 'text-[#647164] hover:bg-[#F0FDF4] hover:text-[#166534]' }}">
-                    <x-icon :name="$item['icon']" :size="17" />
+                    
+                    <div style="position: relative; display: inline-flex;">
+                        <x-icon :name="$item['icon']" :size="17" />
+                        
+                        @if ($isIncomingRequest && $pendingRequestCount > 0)
+                            <span style="position: absolute; top: -6px; right: -10px; background-color: #EF4444; color: white; border: 2px solid white; border-radius: 999px; padding: 0 5px; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                                {{ $pendingRequestCount }}
+                            </span>
+                        @endif
+
+                        @if ($isMyRequest && $acceptedRequestCount > 0)
+                            <span style="position: absolute; top: -6px; right: -10px; background-color: #EF4444; color: white; border: 2px solid white; border-radius: 999px; padding: 0 5px; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                                {{ $acceptedRequestCount }}
+                            </span>
+                        @endif
+                    </div>
+                    
                     <span class="sidebar-label">{{ $item['label'] }}</span>
                 </a>
             @endforeach
@@ -482,17 +516,45 @@ html.dark .theme-preview-light > div {
     </div>
 </div>
 
+{{-- ============ MODAL PREVIEW GAMBAR (ZOOM) ============ --}}
+<div id="imageZoomModal" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4" onclick="closeImageZoom()">
+    <button type="button" class="absolute top-5 right-5 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full grid place-items-center text-white transition z-50" onclick="closeImageZoom()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <img id="imageZoomSrc" src="" alt="Zoomed Image" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" onclick="event.stopPropagation()">
+</div>
+
 {{-- ===================== MOBILE BOTTOM NAV ===================== --}}
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-t border-[#E3EAE3] z-50 flex items-center justify-around px-1"
      style="padding-bottom: env(safe-area-inset-bottom);">
     @foreach ($mobileNav as $item)
-        @php $active = request()->routeIs($item['route']); @endphp
+        @php 
+            $active = request()->routeIs($item['route']); 
+            $isIncomingRequest = $item['route'] === 'supplier.requests.index';
+            $isMyRequest = $item['route'] === 'customer.requests.index';
+        @endphp
         <a href="{{ route($item['route']) }}"
            class="flex flex-col items-center justify-center gap-0.5 flex-1 py-2 text-[10px] font-bold transition
                   {{ $active ? 'text-[#166534]' : 'text-[#647164]' }}">
-            <span class="w-10 h-6 rounded-lg grid place-items-center {{ $active ? 'bg-[#DCFCE7]' : '' }}">
-                <x-icon :name="$item['icon']" :size="16" />
-            </span>
+            
+            <div style="position: relative; display: inline-flex;">
+                <span class="w-10 h-6 rounded-lg grid place-items-center {{ $active ? 'bg-[#DCFCE7]' : '' }}">
+                    <x-icon :name="$item['icon']" :size="16" />
+                </span>
+
+                @if ($isIncomingRequest && $pendingRequestCount > 0)
+                    <span style="position: absolute; top: -4px; right: -6px; background-color: #EF4444; color: white; border: 2px solid white; border-radius: 999px; padding: 0 5px; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                        {{ $pendingRequestCount }}
+                    </span>
+                @endif
+
+                @if ($isMyRequest && $acceptedRequestCount > 0)
+                    <span style="position: absolute; top: -4px; right: -6px; background-color: #EF4444; color: white; border: 2px solid white; border-radius: 999px; padding: 0 5px; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                        {{ $acceptedRequestCount }}
+                    </span>
+                @endif
+            </div>
+
             {{ $item['label'] }}
         </a>
     @endforeach
@@ -587,6 +649,21 @@ html.dark .theme-preview-light > div {
             if (wrap) wrap.classList.remove('open');
         }
     });
+    
+function openImageZoom(src) {
+    if (!src) return;
+    document.getElementById('imageZoomSrc').src = src;
+    document.getElementById('imageZoomModal').classList.remove('hidden');
+    document.getElementById('imageZoomModal').classList.add('flex');
+    document.body.style.overflow = 'hidden'; // Kunci scroll
+}
+
+function closeImageZoom() {
+    document.getElementById('imageZoomModal').classList.add('hidden');
+    document.getElementById('imageZoomModal').classList.remove('flex');
+    document.getElementById('imageZoomSrc').src = '';
+    document.body.style.overflow = ''; // Kembalikan scroll
+}
 </script>
 </body>
 </html>

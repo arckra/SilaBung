@@ -9,7 +9,22 @@
 @endsection
 
 @section('content')
+{{-- ============ STICKY ACTION BAR ============ --}}
+<div class="sticky top-[68px] z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 mb-4 bg-[#F8FAF8]/95 backdrop-blur-md border-b border-[#E3EAE3]">
+    <div class="flex items-center gap-3">
+        <a href="{{ route('customer.wishlist.create') }}"
+           class="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-[#16A34A] text-white text-sm font-bold shadow-md shadow-green-600/20 hover:bg-[#166534] transition">
+            <x-icon name="plus" :size="16" />
+            Buat Wishlist
+        </a>
 
+        @if ($wishlists->total() > 0)
+            <span class="text-xs text-[#647164] font-semibold">
+                {{ $wishlists->total() }} wishlist
+            </span>
+        @endif
+    </div>
+</div>
 
 @if ($wishlists->isEmpty())
     <div class="bg-white border border-[#E3EAE3] rounded-2xl">
@@ -21,7 +36,7 @@
             :actionHref="route('customer.wishlist.create')" />
     </div>
 @else
-    <div class="space-y-3">
+        <div class="space-y-3">
         @foreach ($wishlists as $wl)
             @php
                 $statusMap = [
@@ -33,31 +48,49 @@
                 $st = $statusMap[$wl->status];
             @endphp
 
-            <a href="{{ route('customer.wishlist.show', $wl) }}"
-               class="block bg-white border border-[#E3EAE3] rounded-2xl p-5 hover:shadow-md hover:border-green-300 transition">
-                <div class="flex items-start gap-4 flex-wrap">
+            <div class="bg-white border border-[#E3EAE3] rounded-2xl p-5 hover:shadow-md hover:border-green-300 transition flex items-center gap-3">
+                
+                {{-- Area yang bisa diklik (Link ke Detail) --}}
+                <a href="{{ route('customer.wishlist.show', $wl) }}" class="flex-1 flex items-start gap-4 min-w-0">
                     <div class="w-11 h-11 rounded-xl bg-[#DCFCE7] text-[#166534] grid place-items-center shrink-0">
                         <x-icon name="target" :size="20" />
                     </div>
-                    <div class="flex-1 min-w-[200px]">
+                    <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2 flex-wrap mb-1.5">
-                            <h3 class="font-extrabold tracking-tight">{{ $wl->title }}</h3>
+                            <h3 class="font-extrabold tracking-tight truncate">{{ $wl->title }}</h3>
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ $st['class'] }}">
                                 {{ $st['label'] }}
                             </span>
                         </div>
                         <div class="text-xs text-[#647164]">
-                            {{ $wl->items->count() }} barang · dibuat {{ $wl->created_at->diffForHumans() }}
+                            {{ $wl->items->count() }} Barang. dibuat {{ $wl->created_at->diffForHumans() }}
                         </div>
                         <div class="text-[11px] text-[#647164] mt-1.5 truncate">
                             {{ $wl->items->pluck('category.name')->unique()->take(4)->join(', ') }}
                         </div>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#647164" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                </a>
+
+                {{-- Tombol Hapus --}}
+                <form method="POST" action="{{ route('customer.wishlist.destroy', $wl) }}" 
+                      onsubmit="return confirm('Yakin ingin menghapus wishlist ini?');"
+                      class="shrink-0 ml-2">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" 
+                            class="w-9 h-9 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 transition grid place-items-center" 
+                            title="Hapus Wishlist">
+                        <x-icon name="trash" :size="16" />
+                    </button>
+                </form>
+
+                {{-- Ikon Panah (Bagian dari Link) --}}
+                <a href="{{ route('customer.wishlist.show', $wl) }}" class="shrink-0 text-[#647164] hover:text-[#166534] transition px-1">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 18l6-6-6-6"/>
                     </svg>
-                </div>
-            </a>
+                </a>
+            </div>
         @endforeach
     </div>
 

@@ -76,7 +76,6 @@
             </div>
         </div>
 
-        {{-- Footer quote --}}
         <div class="relative text-white/60 text-[12px]">
             © {{ date('Y') }} SILABUNG — Mendukung circular economy Indonesia.
         </div>
@@ -85,31 +84,28 @@
     {{-- ==================== RIGHT PANEL (form) ==================== --}}
     <div class="flex flex-col justify-center px-5 sm:px-8 py-10 lg:py-12 bg-[#F8FAF8]">
 
-        {{-- Mobile-only brand --}}
         <a href="{{ route('home') }}" class="lg:hidden flex items-center gap-2.5 mb-8 w-fit mx-auto">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#16A34A] to-[#166534] grid place-items-center text-white shadow-md shadow-green-500/25">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
-                    <path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
-                </svg>
-            </div>
+            <img src="{{ asset('images/logo_silabung3.png') }}" 
+                alt="Logo SILABUNG" 
+                class="w-9 h-9 object-contain shrink-0">
             <div>
                 <div class="font-extrabold tracking-tight text-[15px] leading-tight">SILABUNG</div>
                 <div class="text-[10px] text-[#647164] font-semibold tracking-wide">Sirkula Sambung</div>
             </div>
         </a>
 
-        <div class="flex items-center gap-4 text-xs text-[#647164]">
+        <div class="w-full max-w-[420px] mx-auto fade-in">
+            @yield('content')
+        </div>
+
+        <div class="mt-10 flex flex-wrap justify-center items-center gap-3 sm:gap-4 text-xs text-[#647164]">
             <span>© {{ date('Y') }} SILABUNG</span>
             <a href="{{ route('tos') }}" class="hover:text-[#166534] transition">Syarat & Ketentuan</a>
             <a href="{{ route('tentang') }}" class="hover:text-[#166534] transition">Tentang Kami</a>
         </div>
-        <div class="w-full max-w-[420px] mx-auto fade-in">
-            @yield('content')
-        </div>
+
     </div>
 </div>
-
 
 </body>
 </html>

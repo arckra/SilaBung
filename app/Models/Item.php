@@ -87,6 +87,14 @@ class Item extends Model
         return ['lat' => $this->latitude, 'lng' => $this->longitude];
     }
 
+    public function getImageUrlAttribute(): ?string
+    {
+        if (! $this->image_path) {
+            return null;
+        }
+        return asset('uploads/' . $this->image_path);
+    }
+    
     public function refreshStatus(): void
     {
         if ($this->quantity <= 0) {
